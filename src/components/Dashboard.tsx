@@ -199,11 +199,11 @@ export default function Dashboard() {
                   <div className="mt-4 pt-4 border-t">
                     <div className="flex justify-between text-sm mb-2">
                       <span className="text-gray-600">الإيرادات</span>
-                      <span className="text-green-600 font-medium">ج.م {stats.totalRevenue.toFixed(2)} </span>
+                      <span className="text-green-600 font-medium">{stats.totalRevenue.toFixed(2)} ج.م</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">التكاليف</span>
-                      <span className="text-red-600 font-medium">ج.م {stats.totalExpenses.toFixed(2)}</span>
+                      <span className="text-red-600 font-medium">{stats.totalExpenses.toFixed(2)} ج.م</span>
                     </div>
                   </div>
                 </div>
