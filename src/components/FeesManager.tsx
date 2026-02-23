@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { DollarSign, Plus, Edit2, Trash2, Search, X } from 'lucide-react';
+import { DollarSign, Plus, Edit2, Trash2, Search, X, Printer } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { Fee, Student } from '../types/database';
@@ -121,9 +121,473 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
       payment_type: fee.payment_type,
       payment_date: fee.payment_date,
       academic_year: fee.academic_year,
-      notes: fee.notes,
+      notes: fee.notes || '',
     });
     setShowForm(true);
+  };
+
+  const handlePrintReceipt = (fee: Fee) => {
+    // الحصول على بيانات الطالب المرتبط بالدفعة
+    const student = students.find(s => s.id === fee.student_id) || fee.student;
+    
+    if (!student) {
+      alert('لم يتم العثور على بيانات الطالب');
+      return;
+    }
+
+    // فتح نافذة طباعة جديدة
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      alert('الرجاء السماح بفتح النوافذ المنبثقة لطباعة الإيصال');
+      return;
+    }
+
+    // تنسيق التاريخ
+    const formatDate = (dateString: string) => {
+      try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('ar-EG', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        });
+      } catch {
+        return dateString;
+      }
+    };
+
+    // محتوى صفحة الطباعة
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html dir="rtl">
+      <head>
+        <meta charset="UTF-8">
+        <title>إيصال سداد - ${student.full_name}</title>
+        <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          
+          body {
+            font-family: 'Arial', 'Tahoma', sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+          }
+          
+          .receipt {
+            max-width: 700px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+          }
+          
+          .receipt::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #22c55e20 0%, transparent 100%);
+            border-radius: 0 0 0 150px;
+          }
+          
+          .receipt::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(225deg, #22c55e20 0%, transparent 100%);
+            border-radius: 0 150px 0 0;
+          }
+          
+          .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px dashed #e5e7eb;
+            position: relative;
+          }
+          
+          .logo {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 15px -3px rgba(34, 197, 94, 0.3);
+          }
+          
+          .school-name {
+            font-size: 32px;
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 5px;
+          }
+          
+          .receipt-title {
+            font-size: 20px;
+            color: #22c55e;
+            font-weight: 600;
+            letter-spacing: 1px;
+          }
+          
+          .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            border: 1px solid #e5e7eb;
+          }
+          
+          .info-item {
+            display: flex;
+            flex-direction: column;
+          }
+          
+          .info-label {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 5px;
+          }
+          
+          .info-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #111827;
+          }
+          
+          .student-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid #22c55e30;
+            position: relative;
+            overflow: hidden;
+          }
+          
+          .student-card::before {
+            content: '📚';
+            position: absolute;
+            bottom: -10px;
+            left: -10px;
+            font-size: 80px;
+            opacity: 0.1;
+            transform: rotate(-15deg);
+          }
+          
+          .student-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 15px;
+          }
+          
+          .student-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+          }
+          
+          .detail-box {
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+          }
+          
+          .detail-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 5px;
+          }
+          
+          .detail-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #22c55e;
+          }
+          
+          .payment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          }
+          
+          .payment-table th {
+            background: #22c55e;
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 14px;
+          }
+          
+          .payment-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #374151;
+          }
+          
+          .payment-table tr:last-child td {
+            border-bottom: none;
+          }
+          
+          .payment-table .total-row {
+            background: #f8fafc;
+            font-weight: bold;
+          }
+          
+          .total-amount {
+            font-size: 20px;
+            color: #22c55e;
+            font-weight: bold;
+          }
+          
+          .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #e5e7eb;
+          }
+          
+          .stamp {
+            width: 120px;
+            height: 120px;
+            border: 3px solid #22c55e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(-15deg);
+            opacity: 0.8;
+            background: #f0fdf4;
+          }
+          
+          .stamp-content {
+            text-align: center;
+            transform: rotate(15deg);
+          }
+          
+          .stamp-text {
+            color: #22c55e;
+            font-weight: bold;
+            font-size: 16px;
+            border-top: 2px solid #22c55e;
+            border-bottom: 2px solid #22c55e;
+            padding: 5px 0;
+          }
+          
+          .signature {
+            text-align: center;
+          }
+          
+          .signature-line {
+            width: 200px;
+            height: 2px;
+            background: #9ca3af;
+            margin: 10px 0;
+          }
+          
+          .signature-title {
+            font-size: 14px;
+            color: #6b7280;
+          }
+          
+          .notes {
+            background: #fef9c3;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #854d0e;
+            border-right: 4px solid #eab308;
+          }
+          
+          .watermark {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 12px;
+            color: #9ca3af;
+            opacity: 0.5;
+          }
+          
+          @media print {
+            body {
+              background: white;
+              padding: 0;
+            }
+            
+            .receipt {
+              box-shadow: none;
+              padding: 20px;
+            }
+            
+            .stamp {
+              opacity: 0.5;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="receipt">
+          <!-- الهيدر مع الشعار -->
+          <div class="header">
+            <div class="logo">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="white">
+                <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+            </div>
+            <h1 class="school-name">مدرسة النور</h1>
+            <div class="receipt-title">إيصال سداد المصاريف الدراسية</div>
+          </div>
+
+          <!-- رقم الإيصال والتاريخ -->
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">رقم الإيصال</span>
+              <span class="info-value">#${fee.id.slice(0, 8).toUpperCase()}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">تاريخ الإصدار</span>
+              <span class="info-value">${formatDate(fee.payment_date)}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">وقت الطباعة</span>
+              <span class="info-value">${new Date().toLocaleTimeString('ar-EG')}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">السنة الدراسية</span>
+              <span class="info-value">${fee.academic_year}</span>
+            </div>
+          </div>
+
+          <!-- بيانات الطالب -->
+          <div class="student-card">
+            <div class="student-name">${student.full_name}</div>
+            <div class="student-details">
+              <div class="detail-box">
+                <div class="detail-label">الصف الدراسي</div>
+                <div class="detail-value">${student.grade}</div>
+              </div>
+              ${student.parent_name ? `
+              <div class="detail-box">
+                <div class="detail-label">وليّ الأمر</div>
+                <div class="detail-value">${student.parent_name}</div>
+              </div>
+              ` : ''}
+              ${student.parent_phone ? `
+              <div class="detail-box">
+                <div class="detail-label">رقم الهاتف</div>
+                <div class="detail-value" dir="ltr">${student.parent_phone}</div>
+              </div>
+              ` : ''}
+            </div>
+          </div>
+
+          <!-- جدول تفاصيل الدفع -->
+          <table class="payment-table">
+            <thead>
+              <tr>
+                <th>البيان</th>
+                <th>المبلغ</th>
+                <th>ملاحظات</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>${fee.payment_type}</strong>
+                  ${fee.notes ? `<br><small style="color: #6b7280;">${fee.notes}</small>` : ''}
+                </td>
+                <td style="color: #22c55e; font-weight: bold; font-size: 18px;">
+                  ${fee.amount.toFixed(2)} ج.م
+                </td>
+                <td>نقداً</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="total-row">
+                <td colspan="2" style="text-align: left;">
+                  <span style="font-size: 16px;">الإجمالي</span>
+                </td>
+                <td>
+                  <span class="total-amount">${fee.amount.toFixed(2)} ج.م</span>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+
+          <!-- الملاحظات الإضافية -->
+          ${fee.notes ? `
+          <div class="notes">
+            <strong>📝 ملاحظات إضافية:</strong> ${fee.notes}
+          </div>
+          ` : ''}
+
+          <!-- الختم الإلكتروني والتوقيع -->
+          <div class="footer">
+            <div class="stamp">
+              <div class="stamp-content">
+                <div style="font-size: 24px; margin-bottom: 5px;">✅</div>
+                <div class="stamp-text">معتمد</div>
+                <div style="font-size: 10px; margin-top: 5px;">إلكترونياً</div>
+              </div>
+            </div>
+            
+            <div class="signature">
+              <div style="font-size: 24px; margin-bottom: 10px;">🖊️</div>
+              <div style="width: 200px; height: 2px; background: #9ca3af; margin: 10px 0;"></div>
+              <div class="signature-title">المسؤول المالي</div>
+            </div>
+          </div>
+
+          <!-- تذييل -->
+          <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">
+            <p>تم إنشاء هذا الإيصال إلكترونياً وهو معتمد بدون توقيع</p>
+            <p style="margin-top: 5px;">للاستفسار: info@school.com | 0123456789</p>
+          </div>
+
+          <!-- علامة مائية -->
+          <div class="watermark">نظام إدارتي لإدارة المدارس</div>
+        </div>
+      </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+    printWindow.focus();
+    
+    // تأخير الطباعة قليلاً للتأكد من تحميل المحتوى
+    setTimeout(() => {
+      printWindow.print();
+    }, 500);
   };
 
   const resetForm = () => {
@@ -310,11 +774,13 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
       ) : (
         <div className="grid gap-4">
           {filteredFees.map((fee) => (
-            <div key={fee.id} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-all">
+            <div key={fee.id} className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-all border-r-4 border-green-500">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-3">
-                    <DollarSign className="w-5 h-5 text-green-600" />
+                    <div className="bg-green-100 p-2 rounded-lg">
+                      <DollarSign className="w-5 h-5 text-green-600" />
+                    </div>
                     <h3 className="text-lg font-bold text-gray-900">
                       {fee.student?.full_name}
                     </h3>
@@ -323,39 +789,48 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
                     </span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-sm">
-                    <div>
-                      <span className="text-gray-600">المبلغ:</span>
-                      <span className="font-bold text-green-600 mr-2">{fee.amount.toFixed(2)} ج.م</span>
+                    <div className="bg-gray-50 p-2 rounded-lg">
+                      <span className="text-gray-600 block text-xs">المبلغ</span>
+                      <span className="font-bold text-green-600 text-lg">{fee.amount.toFixed(2)} ج.م</span>
                     </div>
-                    <div>
-                      <span className="text-gray-600">التاريخ:</span>
-                      <span className="font-medium text-gray-900 mr-2">{fee.payment_date}</span>
+                    <div className="bg-gray-50 p-2 rounded-lg">
+                      <span className="text-gray-600 block text-xs">التاريخ</span>
+                      <span className="font-medium text-gray-900">{fee.payment_date}</span>
                     </div>
-                    <div>
-                      <span className="text-gray-600">السنة:</span>
-                      <span className="font-medium text-gray-900 mr-2">{fee.academic_year}</span>
+                    <div className="bg-gray-50 p-2 rounded-lg">
+                      <span className="text-gray-600 block text-xs">السنة</span>
+                      <span className="font-medium text-gray-900">{fee.academic_year}</span>
                     </div>
-                    <div>
-                      <span className="text-gray-600">الصف:</span>
-                      <span className="font-medium text-gray-900 mr-2">{fee.student?.grade}</span>
+                    <div className="bg-gray-50 p-2 rounded-lg">
+                      <span className="text-gray-600 block text-xs">الصف</span>
+                      <span className="font-medium text-gray-900">{fee.student?.grade}</span>
                     </div>
                   </div>
                   {fee.notes && (
-                    <p className="mt-2 text-sm text-gray-600">
-                      <span className="font-medium">ملاحظات:</span> {fee.notes}
+                    <p className="mt-3 text-sm text-gray-600 bg-gray-50 p-2 rounded-lg">
+                      <span className="font-medium text-gray-700">📝 ملاحظات:</span> {fee.notes}
                     </p>
                   )}
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 mr-4">
+                  <button
+                    onClick={() => handlePrintReceipt(fee)}
+                    className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-all"
+                    title="طباعة الإيصال"
+                  >
+                    <Printer className="w-5 h-5" />
+                  </button>
                   <button
                     onClick={() => handleEdit(fee)}
                     className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                    title="تعديل"
                   >
                     <Edit2 className="w-5 h-5" />
                   </button>
                   <button
                     onClick={() => handleDelete(fee.id)}
                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                    title="حذف"
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>
