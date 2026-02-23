@@ -213,7 +213,7 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">المبلغ (ر.س)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">المبلغ (ج.م)</label>
                 <input
                   type="number"
                   step="0.01"
@@ -325,7 +325,7 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-sm">
                     <div>
                       <span className="text-gray-600">المبلغ:</span>
-                      <span className="font-bold text-green-600 mr-2">{fee.amount.toFixed(2)} ر.س</span>
+                      <span className="font-bold text-green-600 mr-2">{fee.amount.toFixed(2)} ج.م</span>
                     </div>
                     <div>
                       <span className="text-gray-600">التاريخ:</span>
