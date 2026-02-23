@@ -12,7 +12,7 @@ export default function Login() {
   const [adminCode, setAdminCode] = useState('');
   const { signIn, signUp } = useAuth();
 
-  const ADMIN_SECRET_CODE = 'admin123'; // غير هذا الرقم السري
+  const ADMIN_SECRET_CODE = 'Mahmoud17237ESD@'; // غير هذا الرقم السري
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
