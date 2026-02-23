@@ -169,7 +169,7 @@ export default function ExpensesManager({ onUpdate }: ExpensesManagerProps) {
             {categoryTotals.map(({ category, total }) => (
               <div key={category} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <span className="text-sm text-gray-700">{category}</span>
-                <span className="text-sm font-bold text-red-600">{total.toFixed(2)} ر.س</span>
+                <span className="text-sm font-bold text-red-600">{total.toFixed(2)} ج.م</span>
               </div>
             ))}
           </div>
