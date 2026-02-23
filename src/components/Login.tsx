@@ -39,7 +39,7 @@ export default function Login() {
               <School className="w-12 h-12 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2"> إدارتــي</h1>
-            <p className="text-gray-600 text-center">إدارة شاملة لحسابات المدرسة</p>
+            <p className="text-gray-600 text-center">بيانات أكثر وتقارير أدق وسهولة استخدام</p>
           </div>
 
           <div className="flex gap-2 mb-6 bg-gray-100 p-1 rounded-lg">
