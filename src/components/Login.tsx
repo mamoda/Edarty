@@ -120,7 +120,7 @@ export default function Login() {
         </div>
 
         <div className="mt-6 text-center text-sm text-gray-600">
-          <p>نظام محاسبة احترافي لإدارة المدارس</p>
+          <p>نظام إدارتــي  </p>
         </div>
       </div>
     </div>
