@@ -122,7 +122,7 @@ export default function ProfitReport() {
                 <span className="text-gray-600 text-sm">إجمالي الإيرادات</span>
                 <DollarSign className="w-5 h-5 text-green-600" />
               </div>
-              <p className="text-2xl font-bold text-green-600">{totalRevenue.toFixed(2)} ر.س</p>
+              <p className="text-2xl font-bold text-green-600">{totalRevenue.toFixed(2)} ج.م</p>
             </div>
 
             <div className="bg-white rounded-xl shadow-md p-6 border-r-4 border-red-600">
@@ -130,7 +130,7 @@ export default function ProfitReport() {
                 <span className="text-gray-600 text-sm">إجمالي التكاليف</span>
                 <TrendingDown className="w-5 h-5 text-red-600" />
               </div>
-              <p className="text-2xl font-bold text-red-600">{totalExpenses.toFixed(2)} ر.س</p>
+              <p className="text-2xl font-bold text-red-600">{totalExpenses.toFixed(2)} ج.م</p>
             </div>
 
             <div className={`bg-white rounded-xl shadow-md p-6 border-r-4 ${
@@ -141,7 +141,7 @@ export default function ProfitReport() {
                 <TrendingUp className={`w-5 h-5 ${netProfit >= 0 ? 'text-blue-600' : 'text-orange-600'}`} />
               </div>
               <p className={`text-2xl font-bold ${netProfit >= 0 ? 'text-blue-600' : 'text-orange-600'}`}>
-                {netProfit >= 0 ? '+' : ''}{netProfit.toFixed(2)} ر.س
+                {netProfit >= 0 ? '+' : ''}{netProfit.toFixed(2)} ج.م
               </p>
             </div>
           </div>
@@ -163,12 +163,12 @@ export default function ProfitReport() {
                   {monthlyData.map((data, index) => (
                     <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                       <td className="py-3 px-4 font-medium text-gray-900">{data.month}</td>
-                      <td className="py-3 px-4 text-green-600 font-medium">{data.revenue.toFixed(2)} ر.س</td>
-                      <td className="py-3 px-4 text-red-600 font-medium">{data.expenses.toFixed(2)} ر.س</td>
+                      <td className="py-3 px-4 text-green-600 font-medium">{data.revenue.toFixed(2)} ج.م</td>
+                      <td className="py-3 px-4 text-red-600 font-medium">{data.expenses.toFixed(2)} ج.م</td>
                       <td className={`py-3 px-4 font-bold ${
                         data.profit >= 0 ? 'text-blue-600' : 'text-orange-600'
                       }`}>
-                        {data.profit >= 0 ? '+' : ''}{data.profit.toFixed(2)} ر.س
+                        {data.profit >= 0 ? '+' : ''}{data.profit.toFixed(2)} ج.م
                       </td>
                       <td className="py-3 px-4 text-center">
                         {data.profit >= 0 ? (
@@ -193,10 +193,10 @@ export default function ProfitReport() {
                 <tfoot className="bg-gray-50 border-t-2 border-gray-200">
                   <tr className="font-bold">
                     <td className="py-3 px-4 text-gray-900">الإجمالي</td>
-                    <td className="py-3 px-4 text-green-600">{totalRevenue.toFixed(2)} ر.س</td>
-                    <td className="py-3 px-4 text-red-600">{totalExpenses.toFixed(2)} ر.س</td>
+                    <td className="py-3 px-4 text-green-600">{totalRevenue.toFixed(2)} ج.م</td>
+                    <td className="py-3 px-4 text-red-600">{totalExpenses.toFixed(2)} ج.م</td>
                     <td className={`py-3 px-4 ${netProfit >= 0 ? 'text-blue-600' : 'text-orange-600'}`}>
-                      {netProfit >= 0 ? '+' : ''}{netProfit.toFixed(2)} ر.س
+                      {netProfit >= 0 ? '+' : ''}{netProfit.toFixed(2)} ج.م
                     </td>
                     <td></td>
                   </tr>
@@ -231,16 +231,16 @@ export default function ProfitReport() {
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">الإيرادات:</span>
-                    <span className="font-medium text-green-600">{(totalRevenue / 12).toFixed(2)} ر.س</span>
+                    <span className="font-medium text-green-600">{(totalRevenue / 12).toFixed(2)} ج.م</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">التكاليف:</span>
-                    <span className="font-medium text-red-600">{(totalExpenses / 12).toFixed(2)} ر.س</span>
+                    <span className="font-medium text-red-600">{(totalExpenses / 12).toFixed(2)} ج.م</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">الربح:</span>
                     <span className={`font-bold ${netProfit >= 0 ? 'text-blue-600' : 'text-orange-600'}`}>
-                      {(netProfit / 12).toFixed(2)} ر.س
+                      {(netProfit / 12).toFixed(2)} ج.م
                     </span>
                   </div>
                 </div>
