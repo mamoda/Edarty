@@ -12,7 +12,9 @@ export const exportToExcel = (data: any[], fileName: string, sheetName: string =
   
   // ضبط عرض الأعمدة تلقائياً
   const maxWidth = 50;
-  const wscols = [];
+  // Fix: Add type annotation for wscols
+  const wscols: XLSX.ColInfo[] = [];
+  
   if (data.length > 0) {
     const firstRow = data[0];
     Object.keys(firstRow).forEach(key => {
@@ -37,7 +39,8 @@ export const exportMultipleSheets = (sheets: { data: any[], sheetName: string }[
     // ضبط عرض الأعمدة
     if (data.length > 0) {
       const firstRow = data[0];
-      const wscols = Object.keys(firstRow).map(key => ({ wch: Math.min(50, key.length + 10) }));
+      // Fix: Use explicit typing here as well
+      const wscols: XLSX.ColInfo[] = Object.keys(firstRow).map(key => ({ wch: Math.min(50, key.length + 10) }));
       worksheet['!cols'] = wscols;
     }
     
