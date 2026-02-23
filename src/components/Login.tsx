@@ -38,7 +38,7 @@ export default function Login() {
             <div className="bg-blue-600 p-4 rounded-full mb-4">
               <School className="w-12 h-12 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">نظام المحاسبة المدرسي</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2"> إدارتــي</h1>
             <p className="text-gray-600 text-center">إدارة شاملة لحسابات المدرسة</p>
           </div>
 
