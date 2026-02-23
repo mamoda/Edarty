@@ -172,17 +172,17 @@ export default function Dashboard() {
                       />
                       <StatCard
                         title="إجمالي الإيرادات"
-                        value={stats.totalRevenue.toFixed(2)}
                         icon={DollarSign}
                         color="#8b5cf6"
                         prefix="ج.م"
+                        value={stats.totalRevenue.toFixed(2)}
                       />
                       <StatCard
                         title="إجمالي التكاليف"
-                        value={stats.totalExpenses.toFixed(2)}
                         icon={TrendingDown}
                         color="#ef4444"
                         prefix="ج.م"
+                        value={stats.totalExpenses.toFixed(2)}
                       />
                     </div>
                   )}
