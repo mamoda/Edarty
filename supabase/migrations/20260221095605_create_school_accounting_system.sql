@@ -158,3 +158,48 @@ CREATE INDEX IF NOT EXISTS idx_expenses_user_id ON expenses(user_id);
 CREATE INDEX IF NOT EXISTS idx_students_status ON students(status);
 CREATE INDEX IF NOT EXISTS idx_fees_payment_date ON fees(payment_date);
 CREATE INDEX IF NOT EXISTS idx_expenses_expense_date ON expenses(expense_date);
+
+
+
+CREATE TABLE teachers (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    email VARCHAR(255),
+    specialization VARCHAR(255),
+    salary DECIMAL(10, 2) DEFAULT 0,
+    hire_date DATE DEFAULT CURRENT_DATE,
+    status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'inactive')),
+    address TEXT,
+    qualifications TEXT,
+    notes TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+-- Create index for faster queries
+CREATE INDEX idx_teachers_user_id ON teachers(user_id);
+CREATE INDEX idx_teachers_status ON teachers(status);
+
+-- Enable RLS
+ALTER TABLE teachers ENABLE ROW LEVEL SECURITY;
+
+-- Create policy
+CREATE POLICY "Users can manage their own teachers" ON teachers
+    FOR ALL USING (auth.uid() = user_id);
+
+-- Create function to update updated_at
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = TIMEZONE('utc'::text, NOW());
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- Create trigger
+CREATE TRIGGER update_teachers_updated_at
+    BEFORE UPDATE ON teachers
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
