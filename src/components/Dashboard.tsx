@@ -230,7 +230,7 @@ export default function Dashboard() {
                   </button>
 
                   <button
-                    onClick={() => setCurrentView('fees')}
+                    onClick={() => setCurrentView('teachers')}
                     className="bg-white hover:bg-green-50 rounded-xl shadow-md p-6 text-right transition-all group"
                   >
                     <Receipt className="w-8 h-8 text-green-600 mb-3 group-hover:scale-110 transition-transform" />
@@ -249,7 +249,6 @@ export default function Dashboard() {
                 </div>
               </div>
             )}
-
             {currentView === 'students' && <StudentsManager onUpdate={loadStatistics} />}
             {currentView === 'teachers' && <TeachersManager onUpdate={loadStatistics} />}
             {currentView === 'fees' && <FeesManager onUpdate={loadStatistics} />}
