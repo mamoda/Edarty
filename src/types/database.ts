@@ -42,3 +42,8 @@ export interface Statistics {
   totalExpenses: number;
   netProfit: number;
 }
+
+export interface Techer {
+  id: string;
+  techer_id: string;
+}
