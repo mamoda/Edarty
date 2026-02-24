@@ -18,7 +18,7 @@ import FeesManager from './FeesManager';
 import ExpensesManager from './ExpensesManager';
 import ProfitReport from './ProfitReport';
 
-type View = 'dashboard' | 'students' | 'fees' | 'expenses' | 'reports';
+type View = 'dashboard' | 'students' | 'fees' | 'expenses' | 'reports' | 'teachers';
 
 export default function Dashboard() {
   const { user, signOut } = useAuth();
@@ -141,6 +141,7 @@ export default function Dashboard() {
             <div className="bg-white rounded-xl shadow-md p-4 space-y-2 sticky top-24">
               <MenuItem label="لوحة التحكم" icon={BarChart3} view="dashboard" />
               <MenuItem label="الطلاب" icon={Users} view="students" count={stats.activeStudents} />
+              <MenuItem label="الأساتذة" icon={Users} view="teachers"/>
               <MenuItem label="تحصيل المصاريف" icon={DollarSign} view="fees" />
               <MenuItem label="التكاليف" icon={TrendingDown} view="expenses" />
               <MenuItem label="تقرير الأرباح" icon={TrendingUp} view="reports" />
