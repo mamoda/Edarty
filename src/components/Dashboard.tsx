@@ -14,6 +14,7 @@ import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { Statistics } from '../types/database';
 import StudentsManager from './StudentsManager';
+import TeachersManager from './TeachersManager';
 import FeesManager from './FeesManager';
 import ExpensesManager from './ExpensesManager';
 import ProfitReport from './ProfitReport';
@@ -141,7 +142,7 @@ export default function Dashboard() {
             <div className="bg-white rounded-xl shadow-md p-4 space-y-2 sticky top-24">
               <MenuItem label="لوحة التحكم" icon={BarChart3} view="dashboard" />
               <MenuItem label="الطلاب" icon={Users} view="students" count={stats.activeStudents} />
-              <MenuItem label="الأساتذة" icon={Users} view="teachers"/>
+              <MenuItem label="الأساتذة" icon={Users} view="teachers" count={stats.activeTeachers} />             
               <MenuItem label="تحصيل المصاريف" icon={DollarSign} view="fees" />
               <MenuItem label="التكاليف" icon={TrendingDown} view="expenses" />
               <MenuItem label="تقرير الأرباح" icon={TrendingUp} view="reports" />
@@ -241,6 +242,7 @@ export default function Dashboard() {
             )}
 
             {currentView === 'students' && <StudentsManager onUpdate={loadStatistics} />}
+            {currentView === 'teachers' && <TeachersManager onUpdate={loadStatistics} />}
             {currentView === 'fees' && <FeesManager onUpdate={loadStatistics} />}
             {currentView === 'expenses' && <ExpensesManager onUpdate={loadStatistics} />}
             {currentView === 'reports' && <ProfitReport />}

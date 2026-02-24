@@ -698,5 +698,5 @@ export default function TeachersManager({ onUpdate }: TeachersManagerProps) {
         </div>
       )}
     </div>
-  ;
+    );
 }
