@@ -34,6 +34,22 @@ export interface Expense {
   notes: string;
   created_at: string;
 }
+export interface Teacher {
+  id: string;
+  user_id: string;
+  name: string;
+  phone: string;
+  email: string;
+  specialization: string;
+  salary: number;
+  hire_date: string;
+  status: 'active' | 'inactive';
+  address?: string;
+  qualifications?: string;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
 
 export interface Statistics {
   totalStudents: number;
@@ -41,9 +57,7 @@ export interface Statistics {
   totalRevenue: number;
   totalExpenses: number;
   netProfit: number;
-}
-
-export interface Techer {
-  id: string;
-  techer_id: string;
+  totalTeachers?: number;
+  activeTeachers?: number;
+  totalSalaries?: number;
 }
