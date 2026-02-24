@@ -224,6 +224,15 @@ export default function Dashboard() {
                     onClick={() => setCurrentView('fees')}
                     className="bg-white hover:bg-green-50 rounded-xl shadow-md p-6 text-right transition-all group"
                   >
+                    <UserPlus className="w-8 h-8 text-blue-600 mb-3 group-hover:scale-110 transition-transform" />
+                    <h4 className="font-bold text-gray-900 mb-1">إدارة الأساتذة</h4>
+                    <p className="text-sm text-gray-600">إضافة وتعديل بيانات الأساتذة</p>
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentView('fees')}
+                    className="bg-white hover:bg-green-50 rounded-xl shadow-md p-6 text-right transition-all group"
+                  >
                     <Receipt className="w-8 h-8 text-green-600 mb-3 group-hover:scale-110 transition-transform" />
                     <h4 className="font-bold text-gray-900 mb-1">تحصيل المصاريف</h4>
                     <p className="text-sm text-gray-600">تسجيل المدفوعات والرسوم</p>
