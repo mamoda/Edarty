@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
@@ -26,22 +25,23 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
-  // حل بسيط ومضمون لاستعادة الموضع مع Vite
+  // ========== الحل الصحيح لاستعادة الموضع ==========
   useEffect(() => {
-    // استخدام sessionStorage بدلاً من localStorage (أفضل مع Vite)
-    const savedScroll = sessionStorage.getItem('vite_scroll_position');
-    const savedSection = sessionStorage.getItem('vite_section');
+    // استخدم localStorage بدلاً من sessionStorage (يدوم لفترة أطول)
+    const savedScroll = localStorage.getItem('landing_scroll_position');
+    const savedSection = localStorage.getItem('landing_section');
     
-    console.log('استعادة الموضع:', { savedScroll, savedSection }); // للتتبع
-    
-    // تأخير بسيط للتأكد من تحمول DOM بالكامل
+    console.log('محاولة استعادة:', { savedScroll, savedSection });
+
+    // تأخير كافٍ للتأكد من تحمول DOM بالكامل
     const timer = setTimeout(() => {
       // الأولوية للقسم المحفوظ
       if (savedSection) {
         const element = document.getElementById(savedSection);
         if (element) {
-          element.scrollIntoView({ behavior: 'instant' }); // استخدم instant بدلاً من smooth
+          element.scrollIntoView({ behavior: 'smooth' });
           console.log('تم التمرير للقسم:', savedSection);
         }
       }
@@ -49,20 +49,18 @@ export default function LandingPage() {
       else if (savedScroll) {
         window.scrollTo({
           top: parseInt(savedScroll),
-          behavior: 'instant'
+          behavior: 'smooth'
         });
         console.log('تم التمرير للموضع:', savedScroll);
       }
       
-      // تنظيف بعد الاستخدام
-      sessionStorage.removeItem('vite_scroll_position');
-      sessionStorage.removeItem('vite_section');
-    }, 200); // تأخير 200ms كافٍ مع Vite
+      setIsFirstLoad(false);
+    }, 300); // تأخير 300ms
 
     return () => clearTimeout(timer);
-  }, []); // تشغيل مرة واحدة فقط
+  }, []); // تشغيل مرة واحدة فقط عند تحميل الصفحة
 
-  // حفظ الموضع عند التمرير
+  // حفظ الموضع عند التمرير (مع تحسين الأداء)
   useEffect(() => {
     let scrollTimer: NodeJS.Timeout;
     
@@ -71,10 +69,10 @@ export default function LandingPage() {
       scrollTimer = setTimeout(() => {
         const currentScroll = window.scrollY;
         if (currentScroll > 0) {
-          sessionStorage.setItem('vite_scroll_position', currentScroll.toString());
+          localStorage.setItem('landing_scroll_position', currentScroll.toString());
           console.log('تم حفظ الموضع:', currentScroll);
         }
-      }, 500); // حفظ بعد توقف التمرير بـ 500ms
+      }, 200); // حفظ بعد توقف التمرير بـ 200ms
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -89,8 +87,8 @@ export default function LandingPage() {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
-      sessionStorage.setItem('vite_section', sectionId);
-      sessionStorage.removeItem('vite_scroll_position');
+      localStorage.setItem('landing_section', sectionId);
+      localStorage.removeItem('landing_scroll_position');
       
       // تحديث الرابط
       window.history.pushState({}, '', `#${sectionId}`);
@@ -98,12 +96,12 @@ export default function LandingPage() {
     setIsMenuOpen(false);
   };
 
-  // حفظ الموضع قبل المغادرة
+  // حفظ الموضع قبل مغادرة الصفحة
   useEffect(() => {
     const handleBeforeUnload = () => {
       const currentScroll = window.scrollY;
       if (currentScroll > 0) {
-        sessionStorage.setItem('vite_scroll_position', currentScroll.toString());
+        localStorage.setItem('landing_scroll_position', currentScroll.toString());
       }
     };
 
@@ -111,16 +109,30 @@ export default function LandingPage() {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, []);
 
+  // التعامل مع الرابط المباشر (مثل /#features)
+  useEffect(() => {
+    if (location.hash && isFirstLoad) {
+      const sectionId = location.hash.replace('#', '');
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+          localStorage.setItem('landing_section', sectionId);
+        }
+      }, 300);
+    }
+  }, [location.hash, isFirstLoad]);
+
   // دوال التنقل
   const handleFreeTrial = () => {
-    sessionStorage.setItem('vite_scroll_position', window.scrollY.toString());
+    localStorage.setItem('landing_scroll_position', window.scrollY.toString());
     localStorage.setItem('freeTrial', 'true');
     localStorage.setItem('signupSource', 'landing_page');
     navigate('/signup?trial=true');
   };
 
   const handleLogin = () => {
-    sessionStorage.setItem('vite_scroll_position', window.scrollY.toString());
+    localStorage.setItem('landing_scroll_position', window.scrollY.toString());
     navigate('/login');
   };
 
@@ -228,7 +240,6 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section id="hero" className="pt-32 pb-20 px-4 relative overflow-hidden">
-        {/* ... باقي المحتوى كما هو ... */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50"></div>
         <div className="absolute left-0 top-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
         <div className="absolute right-0 bottom-0 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
@@ -291,7 +302,7 @@ export default function LandingPage() {
             <div className="relative">
               <div className="bg-white rounded-3xl shadow-2xl p-6 transform rotate-3 hover:rotate-0 transition-transform duration-500">
                 <img 
-                  src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
+                  src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" 
                   alt="Dashboard Preview"
                   className="rounded-2xl w-full"
                 />
@@ -312,13 +323,12 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
       {/* Features Section */}
       <section id="features" className="py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              مميزات متطورة لإدارة مؤسستك
-            </h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">مميزات متطورة لإدارة مؤسستك</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               كل ما تحتاجه لإدارة مدرستك في مكان واحد. وفر الوقت والجهد مع مميزاتنا المتكاملة
             </p>
@@ -326,42 +336,12 @@ export default function LandingPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              {
-                icon: Users,
-                title: 'إدارة الطلاب',
-                description: 'تتبع بيانات الطلاب، الحضور، والغياب بكل سهولة',
-                color: 'blue'
-              },
-              {
-                icon: GraduationCap,
-                title: 'إدارة المعلمين',
-                description: 'إدارة بيانات المعلمين، الرواتب، وجداول الحصص',
-                color: 'purple'
-              },
-              {
-                icon: DollarSign,
-                title: 'تحصيل المصاريف',
-                description: 'تتبع المدفوعات وإصدار الفواتير تلقائياً',
-                color: 'green'
-              },
-              {
-                icon: FileText,
-                title: 'إدارة التكاليف',
-                description: 'تسجيل جميع المصروفات والنفقات بدقة',
-                color: 'orange'
-              },
-              {
-                icon: BarChart3,
-                title: 'تقارير متقدمة',
-                description: 'تحليلات وتقارير دقيقة لأداء مؤسستك',
-                color: 'red'
-              },
-              {
-                icon: Shield,
-                title: 'أمان متكامل',
-                description: 'حماية بياناتك بأعلى معايير الأمان',
-                color: 'indigo'
-              }
+              { icon: Users, title: 'إدارة الطلاب', description: 'تتبع بيانات الطلاب، الحضور، والغياب بكل سهولة', color: 'blue' },
+              { icon: GraduationCap, title: 'إدارة المعلمين', description: 'إدارة بيانات المعلمين، الرواتب، وجداول الحصص', color: 'purple' },
+              { icon: DollarSign, title: 'تحصيل المصاريف', description: 'تتبع المدفوعات وإصدار الفواتير تلقائياً', color: 'green' },
+              { icon: FileText, title: 'إدارة التكاليف', description: 'تسجيل جميع المصروفات والنفقات بدقة', color: 'orange' },
+              { icon: BarChart3, title: 'تقارير متقدمة', description: 'تحليلات وتقارير دقيقة لأداء مؤسستك', color: 'red' },
+              { icon: Shield, title: 'أمان متكامل', description: 'حماية بياناتك بأعلى معايير الأمان', color: 'indigo' }
             ].map((feature, index) => (
               <div key={index} className="group bg-gray-50 rounded-3xl p-8 hover:shadow-xl transition-all hover:-translate-y-2">
                 <div className={`w-16 h-16 bg-${feature.color}-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
@@ -380,9 +360,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">
-                لماذا تختار إدارتــي؟
-              </h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">لماذا تختار إدارتــي؟</h2>
               <div className="space-y-6">
                 {[
                   { icon: Clock, text: 'وفر 80% من وقت الإدارة اليومية' },
@@ -398,19 +376,12 @@ export default function LandingPage() {
                   </div>
                 ))}
               </div>
-              <button 
-                onClick={handleFreeTrial}
-                className="mt-8 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-bold hover:shadow-lg transition-all transform hover:scale-105"
-              >
+              <button onClick={handleFreeTrial} className="mt-8 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-bold hover:shadow-lg transition-all transform hover:scale-105">
                 ابدأ تجربتك المجانية
               </button>
             </div>
             <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
-                alt="Benefits"
-                className="rounded-3xl shadow-2xl"
-              />
+              <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Benefits" className="rounded-3xl shadow-2xl" />
             </div>
           </div>
         </div>
@@ -420,9 +391,7 @@ export default function LandingPage() {
       <section id="pricing" className="py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              خطط مرنة تناسب جميع المؤسسات
-            </h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">خطط مرنة تناسب جميع المؤسسات</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               اختر الخطة المناسبة لمدرستك. جميع الخطط تتضمن 14 يوم تجربة مجانية
             </p>
@@ -430,41 +399,20 @@ export default function LandingPage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              {
-                name: 'الأساسية',
-                price: '299',
-                features: ['100 طالب', '10 معلمين', 'تقارير أساسية', 'دعم عبر البريد']
-              },
-              {
-                name: 'المتقدمة',
-                price: '599',
-                features: ['500 طالب', '30 معلم', 'تقارير متقدمة', 'دعم فني 24/7', 'API مفتوح'],
-                popular: true
-              },
-              {
-                name: 'الاحترافية',
-                price: '999',
-                features: ['غير محدود طلاب', 'غير محدود معلمين', 'تقارير مخصصة', 'مدير حساب مخصص', 'تدريب مجاني']
-              }
+              { name: 'الأساسية', price: '299', features: ['100 طالب', '10 معلمين', 'تقارير أساسية', 'دعم عبر البريد'] },
+              { name: 'المتقدمة', price: '599', features: ['500 طالب', '30 معلم', 'تقارير متقدمة', 'دعم فني 24/7', 'API مفتوح'], popular: true },
+              { name: 'الاحترافية', price: '999', features: ['غير محدود طلاب', 'غير محدود معلمين', 'تقارير مخصصة', 'مدير حساب مخصص', 'تدريب مجاني'] }
             ].map((plan, index) => (
               <div key={index} className={`relative rounded-3xl p-8 ${plan.popular ? 'bg-gradient-to-b from-blue-600 to-purple-600 text-white shadow-2xl scale-105' : 'bg-gray-50'}`}>
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-yellow-400 text-yellow-900 px-4 py-1 rounded-full text-sm font-bold">
-                      الأكثر طلباً
-                    </span>
+                    <span className="bg-yellow-400 text-yellow-900 px-4 py-1 rounded-full text-sm font-bold">الأكثر طلباً</span>
                   </div>
                 )}
-                <h3 className={`text-2xl font-bold mb-4 ${plan.popular ? 'text-white' : 'text-gray-900'}`}>
-                  {plan.name}
-                </h3>
+                <h3 className={`text-2xl font-bold mb-4 ${plan.popular ? 'text-white' : 'text-gray-900'}`}>{plan.name}</h3>
                 <div className="mb-6">
-                  <span className={`text-4xl font-bold ${plan.popular ? 'text-white' : 'text-gray-900'}`}>
-                    {plan.price}
-                  </span>
-                  <span className={`mr-2 ${plan.popular ? 'text-blue-100' : 'text-gray-600'}`}>
-                    ريال / شهرياً
-                  </span>
+                  <span className={`text-4xl font-bold ${plan.popular ? 'text-white' : 'text-gray-900'}`}>{plan.price}</span>
+                  <span className={`mr-2 ${plan.popular ? 'text-blue-100' : 'text-gray-600'}`}>ريال / شهرياً</span>
                 </div>
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, idx) => (
@@ -474,14 +422,9 @@ export default function LandingPage() {
                     </li>
                   ))}
                 </ul>
-                <button 
-                  onClick={handleFreeTrial}
-                  className={`w-full py-3 rounded-xl font-bold transition-all ${
-                    plan.popular 
-                      ? 'bg-white text-blue-600 hover:bg-gray-100' 
-                      : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg'
-                  }`}
-                >
+                <button onClick={handleFreeTrial} className={`w-full py-3 rounded-xl font-bold transition-all ${
+                  plan.popular ? 'bg-white text-blue-600 hover:bg-gray-100' : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg'
+                }`}>
                   ابدأ تجربة مجانية
                 </button>
               </div>
@@ -494,32 +437,21 @@ export default function LandingPage() {
       <section id="testimonials" className="py-20 px-4 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              ماذا يقول عملاؤنا؟
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              اكتشف تجارب المدارس التي تثق في إدارتــي
-            </p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">ماذا يقول عملاؤنا؟</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">اكتشف تجارب المدارس التي تثق في إدارتــي</p>
           </div>
-
           <div className="grid md:grid-cols-3 gap-8">
             {[1, 2, 3].map((_, index) => (
               <div key={index} className="bg-white rounded-3xl p-8 shadow-lg">
                 <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                  ))}
+                  {[...Array(5)].map((_, i) => (<Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />))}
                 </div>
                 <p className="text-gray-700 mb-6 leading-relaxed">
-                  "منذ استخدامنا لإدارتــي، أصبحت عملية إدارة المدرسة أكثر سهولة وفعالية. 
-                  وفرنا الكثير من الوقت والجهد في متابعة الطلاب والمصاريف."
+                  "منذ استخدامنا لإدارتــي، أصبحت عملية إدارة المدرسة أكثر سهولة وفعالية. وفرنا الكثير من الوقت والجهد."
                 </p>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
-                  <div>
-                    <h4 className="font-bold text-gray-900">أحمد محمد</h4>
-                    <p className="text-sm text-gray-600">مدير مدرسة النجاح</p>
-                  </div>
+                  <div><h4 className="font-bold text-gray-900">أحمد محمد</h4><p className="text-sm text-gray-600">مدير مدرسة النجاح</p></div>
                 </div>
               </div>
             ))}
@@ -531,32 +463,15 @@ export default function LandingPage() {
       <section id="faq" className="py-20 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              الأسئلة الشائعة
-            </h2>
-            <p className="text-xl text-gray-600">
-              إجابات على أكثر الأسئلة شيوعاً
-            </p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">الأسئلة الشائعة</h2>
+            <p className="text-xl text-gray-600">إجابات على أكثر الأسئلة شيوعاً</p>
           </div>
-
           <div className="space-y-4">
             {[
-              {
-                q: 'ما هي مدة التجربة المجانية؟',
-                a: 'نقدم 14 يوم تجربة مجانية كاملة مع جميع المميزات'
-              },
-              {
-                q: 'هل يمكنني تغيير خطتي لاحقاً؟',
-                a: 'نعم، يمكنك ترقية أو تخفيض خطتك في أي وقت'
-              },
-              {
-                q: 'هل تدعمون المدارس الكبيرة؟',
-                a: 'نعم، نظامنا مصمم ليدعم المدارس بجميع أحجامها'
-              },
-              {
-                q: 'كيف يمكنني الحصول على الدعم؟',
-                a: 'نقدم دعماً فنياً على مدار الساعة عبر البريد والهاتف'
-              }
+              { q: 'ما هي مدة التجربة المجانية؟', a: 'نقدم 14 يوم تجربة مجانية كاملة مع جميع المميزات' },
+              { q: 'هل يمكنني تغيير خطتي لاحقاً؟', a: 'نعم، يمكنك ترقية أو تخفيض خطتك في أي وقت' },
+              { q: 'هل تدعمون المدارس الكبيرة؟', a: 'نعم، نظامنا مصمم ليدعم المدارس بجميع أحجامها' },
+              { q: 'كيف يمكنني الحصول على الدعم؟', a: 'نقدم دعماً فنياً على مدار الساعة عبر البريد والهاتف' }
             ].map((faq, index) => (
               <div key={index} className="border border-gray-200 rounded-2xl p-6 hover:shadow-md transition-all">
                 <h3 className="text-lg font-bold text-gray-900 mb-3">{faq.q}</h3>
@@ -570,26 +485,14 @@ export default function LandingPage() {
       {/* CTA Section */}
       <section className="py-20 px-4 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600"></div>
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,...')] opacity-10"></div>
-        
         <div className="max-w-4xl mx-auto text-center relative">
-          <h2 className="text-4xl font-bold text-white mb-6">
-            ابدأ رحلة التميز مع إدارتــي اليوم
-          </h2>
-          <p className="text-xl text-blue-100 mb-8">
-            انضم إلى أكثر من 500 مدرسة تثق في نظامنا. جرب مجاناً لمدة 14 يوماً
-          </p>
+          <h2 className="text-4xl font-bold text-white mb-6">ابدأ رحلة التميز مع إدارتــي اليوم</h2>
+          <p className="text-xl text-blue-100 mb-8">انضم إلى أكثر من 500 مدرسة تثق في نظامنا. جرب مجاناً لمدة 14 يوماً</p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <button 
-              onClick={handleFreeTrial}
-              className="px-8 py-4 bg-white text-blue-600 rounded-2xl font-bold text-lg hover:shadow-xl transition-all transform hover:scale-105"
-            >
+            <button onClick={handleFreeTrial} className="px-8 py-4 bg-white text-blue-600 rounded-2xl font-bold text-lg hover:shadow-xl transition-all transform hover:scale-105">
               ابدأ التجربة المجانية
             </button>
-            <button 
-              onClick={handleContactSales}
-              className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-2xl font-bold text-lg hover:bg-white/10 transition-all"
-            >
+            <button onClick={handleContactSales} className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-2xl font-bold text-lg hover:bg-white/10 transition-all">
               تواصل مع المبيعات
             </button>
           </div>
@@ -605,40 +508,32 @@ export default function LandingPage() {
                 <img src={logo} alt="Logo" className="h-10 w-auto" />
                 <span className="text-2xl font-bold">إدارتــي</span>
               </div>
-              <p className="text-gray-400 leading-relaxed">
-                نظام متكامل لإدارة المؤسسات التعليمية
-              </p>
+              <p className="text-gray-400">نظام متكامل لإدارة المؤسسات التعليمية</p>
             </div>
             <div>
               <h4 className="font-bold text-lg mb-4">روابط سريعة</h4>
               <ul className="space-y-2">
-                <li><button onClick={() => scrollToSection('features')} className="text-gray-400 hover:text-white transition-colors">المميزات</button></li>
-                <li><button onClick={() => scrollToSection('pricing')} className="text-gray-400 hover:text-white transition-colors">الأسعار</button></li>
-                <li><button onClick={() => scrollToSection('testimonials')} className="text-gray-400 hover:text-white transition-colors">آراء العملاء</button></li>
-                <li><button onClick={() => scrollToSection('faq')} className="text-gray-400 hover:text-white transition-colors">الأسئلة الشائعة</button></li>
+                <li><button onClick={() => scrollToSection('features')} className="text-gray-400 hover:text-white">المميزات</button></li>
+                <li><button onClick={() => scrollToSection('pricing')} className="text-gray-400 hover:text-white">الأسعار</button></li>
+                <li><button onClick={() => scrollToSection('testimonials')} className="text-gray-400 hover:text-white">آراء العملاء</button></li>
+                <li><button onClick={() => scrollToSection('faq')} className="text-gray-400 hover:text-white">الأسئلة الشائعة</button></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold text-lg mb-4">الدعم</h4>
               <ul className="space-y-2">
-                <li><button className="text-gray-400 hover:text-white transition-colors">مركز المساعدة</button></li>
-                <li><button onClick={handleContactSales} className="text-gray-400 hover:text-white transition-colors">تواصل معنا</button></li>
-                <li><button className="text-gray-400 hover:text-white transition-colors">الشروط والأحكام</button></li>
-                <li><button className="text-gray-400 hover:text-white transition-colors">سياسة الخصوصية</button></li>
+                <li><button className="text-gray-400 hover:text-white">مركز المساعدة</button></li>
+                <li><button onClick={handleContactSales} className="text-gray-400 hover:text-white">تواصل معنا</button></li>
+                <li><button className="text-gray-400 hover:text-white">الشروط والأحكام</button></li>
+                <li><button className="text-gray-400 hover:text-white">سياسة الخصوصية</button></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold text-lg mb-4">تواصل معنا</h4>
               <div className="flex gap-4">
-                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors cursor-pointer">
-                  <span className="sr-only">تويتر</span>
-                </div>
-                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors cursor-pointer">
-                  <span className="sr-only">فيسبوك</span>
-                </div>
-                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors cursor-pointer">
-                  <span className="sr-only">انستغرام</span>
-                </div>
+                <div className="w-10 h-10 bg-gray-800 rounded-full hover:bg-blue-600 transition-colors cursor-pointer"></div>
+                <div className="w-10 h-10 bg-gray-800 rounded-full hover:bg-blue-600 transition-colors cursor-pointer"></div>
+                <div className="w-10 h-10 bg-gray-800 rounded-full hover:bg-blue-600 transition-colors cursor-pointer"></div>
               </div>
             </div>
           </div>
@@ -655,19 +550,13 @@ export default function LandingPage() {
           66% { transform: translate(-20px, 20px) scale(0.9); }
           100% { transform: translate(0px, 0px) scale(1); }
         }
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
+        .animate-blob { animation: blob 7s infinite; }
+        .animation-delay-2000 { animation-delay: 2s; }
         @keyframes bounce-slow {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-20px); }
         }
-        .animate-bounce-slow {
-          animation: bounce-slow 3s infinite;
-        }
+        .animate-bounce-slow { animation: bounce-slow 3s infinite; }
       `}</style>
     </div>
   );
