@@ -63,7 +63,7 @@ export default function LandingPage() {
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => scrollToSection('hero')}>
-              <img src={logo} alt="Logo" className="h-12 w-auto" />
+              <img src={logo} alt="Logo" className="h-20 w-auto" />
             </div>
 
             {/* Desktop Navigation */}
