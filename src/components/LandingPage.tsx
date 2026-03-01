@@ -412,7 +412,7 @@ export default function LandingPage() {
                 <h3 className={`text-2xl font-bold mb-4 ${plan.popular ? 'text-white' : 'text-gray-900'}`}>{plan.name}</h3>
                 <div className="mb-6">
                   <span className={`text-4xl font-bold ${plan.popular ? 'text-white' : 'text-gray-900'}`}>{plan.price}</span>
-                  <span className={`mr-2 ${plan.popular ? 'text-blue-100' : 'text-gray-600'}`}>جنيه / شهرياً</span>
+                  <span className={`mr-2 ${plan.popular ? 'text-blue-100' : 'text-gray-600'}`}>جنيهاً / شهرياً</span>
                 </div>
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, idx) => (
