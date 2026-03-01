@@ -53,7 +53,7 @@ export default function Login() {
               <img
                 src={logo}
                 alt="شعار التطبيق"
-                className="h-20 w-auto"
+                className="h-24 w-auto"
               />
             <p className="text-gray-600 text-center">بيانات أكثر وتقارير أدق وسهولة استخدام</p>
           </div>
