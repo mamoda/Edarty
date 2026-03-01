@@ -49,7 +49,7 @@ export default function Login() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex items-center justify-center p-4" dir="rtl">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8">
-          <div className="flex flex-col items-center mb-8">
+<div className="flex flex-col items-center mb-8 scale-110">
               <img
                 src={logo}
                 alt="شعار التطبيق"
