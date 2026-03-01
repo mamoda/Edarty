@@ -8,18 +8,19 @@ import {
   UserPlus,
   Receipt,
   FileText,
-  BarChart3
+  BarChart3,
+  Briefcase
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { Statistics } from '../types/database';
 import StudentsManager from './StudentsManager';
-import TeachersManager from './TeachersManager';
 import FeesManager from './FeesManager';
 import ExpensesManager from './ExpensesManager';
+import TeachersManager from './TeachersManager';
 import ProfitReport from './ProfitReport';
 
-type View = 'dashboard' | 'students' | 'fees' | 'expenses' | 'reports' | 'teachers';
+type View = 'dashboard' | 'students' | 'teachers' | 'fees' | 'expenses' | 'reports';
 
 export default function Dashboard() {
   const { user, signOut } = useAuth();
@@ -121,7 +122,7 @@ export default function Dashboard() {
                 <BarChart3 className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900"> إدارتــي </h1>
+                <h1 className="text-xl font-bold text-gray-900">نظام المحاسبة المدرسي</h1>
                 <p className="text-sm text-gray-600">{user?.email}</p>
               </div>
             </div>
@@ -142,7 +143,7 @@ export default function Dashboard() {
             <div className="bg-white rounded-xl shadow-md p-4 space-y-2 sticky top-24">
               <MenuItem label="لوحة التحكم" icon={BarChart3} view="dashboard" />
               <MenuItem label="الطلاب" icon={Users} view="students" count={stats.activeStudents} />
-              <MenuItem label="الأساتذة" icon={Users} view="teachers" count={stats.activeTeachers} />             
+              <MenuItem label="المعلمين" icon={Briefcase} view="teachers" />
               <MenuItem label="تحصيل المصاريف" icon={DollarSign} view="fees" />
               <MenuItem label="التكاليف" icon={TrendingDown} view="expenses" />
               <MenuItem label="تقرير الأرباح" icon={TrendingUp} view="reports" />
@@ -177,14 +178,14 @@ export default function Dashboard() {
                         value={stats.totalRevenue.toFixed(2)}
                         icon={DollarSign}
                         color="#8b5cf6"
-                        prefix="ج.م"
+                        prefix="ر.س "
                       />
                       <StatCard
                         title="إجمالي التكاليف"
                         value={stats.totalExpenses.toFixed(2)}
                         icon={TrendingDown}
                         color="#ef4444"
-                        prefix="ج.م"
+                        prefix="ر.س "
                       />
                     </div>
                   )}
@@ -196,16 +197,16 @@ export default function Dashboard() {
                     <TrendingUp className={`w-6 h-6 ${stats.netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`} />
                   </div>
                   <div className={`text-3xl font-bold ${stats.netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {stats.netProfit >= 0 ? '+' : ''}{stats.netProfit.toFixed(2)} ج.م
+                    {stats.netProfit >= 0 ? '+' : ''}{stats.netProfit.toFixed(2)} ر.س
                   </div>
                   <div className="mt-4 pt-4 border-t">
                     <div className="flex justify-between text-sm mb-2">
                       <span className="text-gray-600">الإيرادات</span>
-                      <span className="text-green-600 font-medium">{stats.totalRevenue.toFixed(2)} ج.م</span>
+                      <span className="text-green-600 font-medium">{stats.totalRevenue.toFixed(2)} ر.س</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">التكاليف</span>
-                      <span className="text-red-600 font-medium">{stats.totalExpenses.toFixed(2)} ج.م</span>
+                      <span className="text-red-600 font-medium">{stats.totalExpenses.toFixed(2)} ر.س</span>
                     </div>
                   </div>
                 </div>
@@ -224,15 +225,6 @@ export default function Dashboard() {
                     onClick={() => setCurrentView('fees')}
                     className="bg-white hover:bg-green-50 rounded-xl shadow-md p-6 text-right transition-all group"
                   >
-                    <UserPlus className="w-8 h-8 text-blue-600 mb-3 group-hover:scale-110 transition-transform" />
-                    <h4 className="font-bold text-gray-900 mb-1">إدارة الأساتذة</h4>
-                    <p className="text-sm text-gray-600">إضافة وتعديل بيانات الأساتذة</p>
-                  </button>
-
-                  <button
-                    onClick={() => setCurrentView('teachers')}
-                    className="bg-white hover:bg-green-50 rounded-xl shadow-md p-6 text-right transition-all group"
-                  >
                     <Receipt className="w-8 h-8 text-green-600 mb-3 group-hover:scale-110 transition-transform" />
                     <h4 className="font-bold text-gray-900 mb-1">تحصيل المصاريف</h4>
                     <p className="text-sm text-gray-600">تسجيل المدفوعات والرسوم</p>
@@ -246,9 +238,19 @@ export default function Dashboard() {
                     <h4 className="font-bold text-gray-900 mb-1">إدارة التكاليف</h4>
                     <p className="text-sm text-gray-600">تسجيل المصروفات والنفقات</p>
                   </button>
+
+                  <button
+                    onClick={() => setCurrentView('teachers')}
+                    className="bg-white hover:bg-purple-50 rounded-xl shadow-md p-6 text-right transition-all group"
+                  >
+                    <Briefcase className="w-8 h-8 text-purple-600 mb-3 group-hover:scale-110 transition-transform" />
+                    <h4 className="font-bold text-gray-900 mb-1">إدارة المعلمين</h4>
+                    <p className="text-sm text-gray-600">إدارة بيانات المعلمين والرواتب</p>
+                  </button>
                 </div>
               </div>
             )}
+
             {currentView === 'students' && <StudentsManager onUpdate={loadStatistics} />}
             {currentView === 'teachers' && <TeachersManager onUpdate={loadStatistics} />}
             {currentView === 'fees' && <FeesManager onUpdate={loadStatistics} />}
