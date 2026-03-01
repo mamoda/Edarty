@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { School, Lock } from 'lucide-react';
-import logo from '../assets/643334426_879216198346597_3442987064474073144_n.jpg';
+import logo from '../assets/logo.png';
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
