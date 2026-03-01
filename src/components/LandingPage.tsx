@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
@@ -26,122 +27,107 @@ export default function LandingPage() {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // استعادة آخر موضع أو قسم عند تحميل الصفحة
+  // حل بسيط ومضمون لاستعادة الموضع مع Vite
   useEffect(() => {
-    const savedScrollPosition = sessionStorage.getItem('landingScrollPosition');
-    const savedSection = sessionStorage.getItem('landingLastSection');
+    // استخدام sessionStorage بدلاً من localStorage (أفضل مع Vite)
+    const savedScroll = sessionStorage.getItem('vite_scroll_position');
+    const savedSection = sessionStorage.getItem('vite_section');
     
-    // استعادة الموضع من الرابط إذا كان موجوداً (مثلاً /#features)
-    if (location.hash) {
-      const sectionId = location.hash.replace('#', '');
-      setTimeout(() => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
-    }
-    // استخدم الموضع المحفوظ أولاً
-    else if (savedScrollPosition) {
-      setTimeout(() => {
-        window.scrollTo({
-          top: parseInt(savedScrollPosition),
-          behavior: 'smooth'
-        });
-      }, 100);
-    }
-    // ثم استخدم القسم المحفوظ
-    else if (savedSection) {
-      setTimeout(() => {
+    console.log('استعادة الموضع:', { savedScroll, savedSection }); // للتتبع
+    
+    // تأخير بسيط للتأكد من تحمول DOM بالكامل
+    const timer = setTimeout(() => {
+      // الأولوية للقسم المحفوظ
+      if (savedSection) {
         const element = document.getElementById(savedSection);
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
+          element.scrollIntoView({ behavior: 'instant' }); // استخدم instant بدلاً من smooth
+          console.log('تم التمرير للقسم:', savedSection);
         }
-      }, 100);
-    }
-  }, [location]);
+      }
+      // ثم للموضع المحفوظ
+      else if (savedScroll) {
+        window.scrollTo({
+          top: parseInt(savedScroll),
+          behavior: 'instant'
+        });
+        console.log('تم التمرير للموضع:', savedScroll);
+      }
+      
+      // تنظيف بعد الاستخدام
+      sessionStorage.removeItem('vite_scroll_position');
+      sessionStorage.removeItem('vite_section');
+    }, 200); // تأخير 200ms كافٍ مع Vite
 
-  // حفظ موضع التمرير بشكل مستمر
+    return () => clearTimeout(timer);
+  }, []); // تشغيل مرة واحدة فقط
+
+  // حفظ الموضع عند التمرير
   useEffect(() => {
-    let ticking = false;
+    let scrollTimer: NodeJS.Timeout;
     
     const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          // حفظ الموضع الدقيق
-          sessionStorage.setItem('landingScrollPosition', window.scrollY.toString());
-          
-          // تحديث آخر قسم نشط
-          const sections = ['hero', 'features', 'benefits', 'pricing', 'testimonials', 'faq'];
-          const scrollPosition = window.scrollY + 120; // تعويض ارتفاع الـ header
-
-          for (const section of sections) {
-            const element = document.getElementById(section);
-            if (element) {
-              const { offsetTop, offsetHeight } = element;
-              if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-                sessionStorage.setItem('landingLastSection', section);
-                break;
-              }
-            }
-          }
-          
-          ticking = false;
-        });
-        
-        ticking = true;
-      }
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        const currentScroll = window.scrollY;
+        if (currentScroll > 0) {
+          sessionStorage.setItem('vite_scroll_position', currentScroll.toString());
+          console.log('تم حفظ الموضع:', currentScroll);
+        }
+      }, 500); // حفظ بعد توقف التمرير بـ 500ms
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(scrollTimer);
+    };
   }, []);
 
-  // حفظ الموضع قبل إعادة التحميل
+  // حفظ القسم عند النقر على الروابط
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      sessionStorage.setItem('vite_section', sectionId);
+      sessionStorage.removeItem('vite_scroll_position');
+      
+      // تحديث الرابط
+      window.history.pushState({}, '', `#${sectionId}`);
+    }
+    setIsMenuOpen(false);
+  };
+
+  // حفظ الموضع قبل المغادرة
   useEffect(() => {
     const handleBeforeUnload = () => {
-      sessionStorage.setItem('landingScrollPosition', window.scrollY.toString());
+      const currentScroll = window.scrollY;
+      if (currentScroll > 0) {
+        sessionStorage.setItem('vite_scroll_position', currentScroll.toString());
+      }
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      // تحديث الرابط بدون إعادة تحميل
-      window.history.pushState({}, '', `#${sectionId}`);
-      // حفظ القسم
-      sessionStorage.setItem('landingLastSection', sectionId);
-      // مسح الموضع الدقيق لأننا نستخدم القسم
-      sessionStorage.removeItem('landingScrollPosition');
-    }
-    setIsMenuOpen(false);
-  };
-
-  // دالة للتجربة المجانية
+  // دوال التنقل
   const handleFreeTrial = () => {
-    // حفظ الموضع قبل المغادرة
-    sessionStorage.setItem('landingScrollPosition', window.scrollY.toString());
+    sessionStorage.setItem('vite_scroll_position', window.scrollY.toString());
     localStorage.setItem('freeTrial', 'true');
     localStorage.setItem('signupSource', 'landing_page');
     navigate('/signup?trial=true');
   };
 
-  // دالة لتسجيل الدخول
   const handleLogin = () => {
-    sessionStorage.setItem('landingScrollPosition', window.scrollY.toString());
+    sessionStorage.setItem('vite_scroll_position', window.scrollY.toString());
     navigate('/login');
   };
 
-  // دالة للعرض التوضيحي
   const handleDemo = () => {
     window.open('https://www.youtube.com/watch?v=demo', '_blank');
   };
 
-  // دالة للتواصل مع المبيعات
   const handleContactSales = () => {
     window.location.href = 'mailto:sales@edarty.com?subject=استفسار عن المبيعات';
   };
@@ -240,9 +226,9 @@ export default function LandingPage() {
         )}
       </header>
 
-      {/* Hero Section - أضف id للمرجع */}
+      {/* Hero Section */}
       <section id="hero" className="pt-32 pb-20 px-4 relative overflow-hidden">
-        {/* Background Decorations */}
+        {/* ... باقي المحتوى كما هو ... */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50"></div>
         <div className="absolute left-0 top-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
         <div className="absolute right-0 bottom-0 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
@@ -326,7 +312,6 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
       {/* Features Section */}
       <section id="features" className="py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
