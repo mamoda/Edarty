@@ -45,37 +45,38 @@ export default function Login() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex items-center justify-center p-4" dir="rtl">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-<div className="flex flex-col items-center mb-8 scale-110">
-              <img
-                src={logo}
-                alt="شعار التطبيق"
-                className="h-24 w-auto"
-              />
-            <p className="text-gray-600 text-center">بيانات أكثر وتقارير أدق وسهولة استخدام</p>
+return (
+  <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex items-center justify-center p-4" dir="rtl">
+    <div className="w-full max-w-md">
+      <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="flex flex-col items-center mb-8 scale-110">
+          <img
+            src={logo}
+            alt="شعار التطبيق"
+            className="h-28 w-auto mb-3" // تكبير الشعار من h-24 إلى h-28
+          />
+          <p className="text-gray-600 text-center text-lg"> {/* إضافة text-lg لتكبير النص */}
+            بيانات أكثر وتقارير أدق وسهولة استخدام
+          </p>
+        </div>
+
+        {/* إظهار أزرار التبديل فقط للمستخدمين العاديين أو إذا كان لوحة المسؤول ظاهرة */}
+        {!showAdminPanel && (
+          <div className="flex gap-2 mb-6 bg-gray-100 p-1 rounded-lg scale-105"> {/* تكبير الأزرار قليلاً */}
+            <button
+              type="button"
+              onClick={() => setIsLogin(true)}
+              className={`flex-1 py-3 px-4 rounded-md font-medium transition-all text-base ${
+                isLogin
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              تسجيل الدخول
+            </button>
+            {/* زر إنشاء حساب غير متاح للمستخدمين العاديين */}
           </div>
-
-          {/* إظهار أزرار التبديل فقط للمستخدمين العاديين أو إذا كان لوحة المسؤول ظاهرة */}
-          {!showAdminPanel && (
-            <div className="flex gap-2 mb-6 bg-gray-100 p-1 rounded-lg">
-              <button
-                type="button"
-                onClick={() => setIsLogin(true)}
-                className={`flex-1 py-2 px-4 rounded-md font-medium transition-all ${
-                  isLogin
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                تسجيل الدخول
-              </button>
-              {/* زر إنشاء حساب غير متاح للمستخدمين العاديين */}
-            </div>
-          )}
-
+        )}
           {/* لوحة المسؤول - تظهر فقط بعد إدخال الكود السري */}
           {showAdminPanel && (
             <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
