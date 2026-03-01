@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'; // تم إزالة React من هنا
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Menu, 
@@ -11,12 +11,12 @@ import {
   Clock,
   Award,
   CheckCircle,
-  ArrowLeft,
+  // ArrowLeft,
   BarChart3,
   GraduationCap,
   DollarSign,
   FileText,
-  HeadphonesIcon,
+  // HeadphonesIcon,
   PlayCircle
 } from 'lucide-react';
 import logo from '../assets/logo.png';
