@@ -122,7 +122,7 @@ export default function Dashboard() {
                 <BarChart3 className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">نظام المحاسبة المدرسي</h1>
+                <h1 className="text-xl font-bold text-gray-900">إدارتــي</h1>
                 <p className="text-sm text-gray-600">{user?.email}</p>
               </div>
             </div>
@@ -178,14 +178,14 @@ export default function Dashboard() {
                         value={stats.totalRevenue.toFixed(2)}
                         icon={DollarSign}
                         color="#8b5cf6"
-                        prefix="ر.س "
+                        prefix=" ج.م"
                       />
                       <StatCard
                         title="إجمالي التكاليف"
                         value={stats.totalExpenses.toFixed(2)}
                         icon={TrendingDown}
                         color="#ef4444"
-                        prefix="ر.س "
+                        prefix="ج.م"
                       />
                     </div>
                   )}
@@ -197,16 +197,16 @@ export default function Dashboard() {
                     <TrendingUp className={`w-6 h-6 ${stats.netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`} />
                   </div>
                   <div className={`text-3xl font-bold ${stats.netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {stats.netProfit >= 0 ? '+' : ''}{stats.netProfit.toFixed(2)} ر.س
+                    {stats.netProfit >= 0 ? '+' : ''}{stats.netProfit.toFixed(2)} ج.م
                   </div>
                   <div className="mt-4 pt-4 border-t">
                     <div className="flex justify-between text-sm mb-2">
                       <span className="text-gray-600">الإيرادات</span>
-                      <span className="text-green-600 font-medium">{stats.totalRevenue.toFixed(2)} ر.س</span>
+                      <span className="text-green-600 font-medium">{stats.totalRevenue.toFixed(2)} ج.م</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">التكاليف</span>
-                      <span className="text-red-600 font-medium">{stats.totalExpenses.toFixed(2)} ر.س</span>
+                      <span className="text-red-600 font-medium">{stats.totalExpenses.toFixed(2)} ج.م</span>
                     </div>
                   </div>
                 </div>
