@@ -19,7 +19,7 @@ import FeesManager from './FeesManager';
 import ExpensesManager from './ExpensesManager';
 import TeachersManager from './TeachersManager';
 import ProfitReport from './ProfitReport';
-import logo from '../assets/*.jpg';
+import logo from '../assets/643334426_879216198346597_3442987064474073144_n.jpg';
 
 
 type View = 'dashboard' | 'students' | 'teachers' | 'fees' | 'expenses' | 'reports';
