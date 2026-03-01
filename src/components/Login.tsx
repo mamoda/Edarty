@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { School, Lock } from 'lucide-react';
+import logo from '../assets/643334426_879216198346597_3442987064474073144_n.jpg';
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -50,7 +51,11 @@ export default function Login() {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="flex flex-col items-center mb-8">
             <div className="bg-blue-600 p-4 rounded-full mb-4">
-              <School className="w-12 h-12 text-white" />
+              <img
+                src={logo}
+                alt="شعار التطبيق"
+                className="h-12 w-auto"
+              />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">إدارتــي</h1>
             <p className="text-gray-600 text-center">بيانات أكثر وتقارير أدق وسهولة استخدام</p>
