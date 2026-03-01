@@ -124,7 +124,7 @@ export default function Dashboard() {
           <img 
             src={logo} // ضع مسار الشعار المناسب
             alt="شعار التطبيق"
-            className="h-10 w-auto" // يمكنك تعديل الارتفاع حسب حجم الشعار
+            className="h-16 w-auto" // يمكنك تعديل الارتفاع حسب حجم الشعار
           />
           {/* يمكنك إبقاء النص أو إزالته حسب رغبتك */}
           {/* <h1 className="text-xl font-bold text-gray-900">إدارتــي</h1> */}
