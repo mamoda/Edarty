@@ -118,13 +118,15 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="bg-blue-600 p-2 rounded-lg">
-                <BarChart3 className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">إدارتــي</h1>
-                <p className="text-sm text-gray-600">{user?.email}</p>
-              </div>
+             <div className="flex items-center gap-2">
+          <img 
+            src="assets/643334426_879216198346597_3442987064474073144_n.jpg" // ضع مسار الشعار المناسب
+            alt="شعار التطبيق"
+            className="h-10 w-auto" // يمكنك تعديل الارتفاع حسب حجم الشعار
+          />
+          {/* يمكنك إبقاء النص أو إزالته حسب رغبتك */}
+          {/* <h1 className="text-xl font-bold text-gray-900">إدارتــي</h1> */}
+        </div>
             </div>
             <button
               onClick={() => signOut()}
