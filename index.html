@@ -9,6 +9,22 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://bolt.new/static/og_default.png" />
   </head>
+  <script>
+  // حفظ الموضع قبل إعادة التحميل
+  window.addEventListener('beforeunload', function() {
+    localStorage.setItem('scrollPos', window.scrollY);
+  });
+
+  // استعادة الموضع بعد التحميل
+  window.addEventListener('load', function() {
+    const scrollPos = localStorage.getItem('scrollPos');
+    if (scrollPos) {
+      setTimeout(function() {
+        window.scrollTo(0, parseInt(scrollPos));
+      }, 100);
+    }
+  });
+</script>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
