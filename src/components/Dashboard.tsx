@@ -122,7 +122,7 @@ export default function Dashboard() {
             <div className="flex items-center gap-3">
              <div className="flex items-center gap-2">
           <img 
-            src="assets/643334426_879216198346597_3442987064474073144_n.jpg" // ضع مسار الشعار المناسب
+            src={logo} // ضع مسار الشعار المناسب
             alt="شعار التطبيق"
             className="h-10 w-auto" // يمكنك تعديل الارتفاع حسب حجم الشعار
           />
