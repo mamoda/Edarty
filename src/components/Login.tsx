@@ -50,13 +50,11 @@ export default function Login() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="flex flex-col items-center mb-8">
-            <div className="bg-blue-600 p-4 rounded-full mb-4">
               <img
                 src={logo}
                 alt="شعار التطبيق"
                 className="h-12 w-auto"
               />
-            </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">إدارتــي</h1>
             <p className="text-gray-600 text-center">بيانات أكثر وتقارير أدق وسهولة استخدام</p>
           </div>
