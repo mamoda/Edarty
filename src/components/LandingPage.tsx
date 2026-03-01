@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Menu, 
   X, 
@@ -21,6 +22,7 @@ import {
 import logo from '../assets/logo.png';
 
 export default function LandingPage() {
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const scrollToSection = (sectionId: string) => {
@@ -31,6 +33,28 @@ export default function LandingPage() {
     setIsMenuOpen(false);
   };
 
+  // دالة للتجربة المجانية
+  const handleFreeTrial = () => {
+    localStorage.setItem('freeTrial', 'true');
+    localStorage.setItem('signupSource', 'landing_page');
+    navigate('/signup?trial=true');
+  };
+
+  // دالة لتسجيل الدخول
+  const handleLogin = () => {
+    navigate('/login');
+  };
+
+  // دالة للعرض التوضيحي
+  const handleDemo = () => {
+    window.open('https://www.youtube.com/watch?v=demo', '_blank');
+  };
+
+  // دالة للتواصل مع المبيعات
+  const handleContactSales = () => {
+    window.location.href = 'mailto:sales@edarty.com?subject=استفسار عن المبيعات';
+  };
+
   return (
     <div className="min-h-screen bg-white" dir="rtl">
       {/* Header */}
@@ -38,7 +62,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 cursor-pointer" onClick={() => scrollToSection('hero')}>
               <img src={logo} alt="Logo" className="h-12 w-auto" />
               <span className="text-2xl font-bold bg-gradient-to-l from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 إدارتــي
@@ -66,10 +90,16 @@ export default function LandingPage() {
 
             {/* CTA Buttons */}
             <div className="hidden md:flex items-center gap-4">
-              <button className="px-6 py-2.5 text-gray-700 hover:text-blue-600 transition-colors font-medium">
+              <button 
+                onClick={handleLogin}
+                className="px-6 py-2.5 text-gray-700 hover:text-blue-600 transition-colors font-medium"
+              >
                 تسجيل الدخول
               </button>
-              <button className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium hover:shadow-lg hover:shadow-blue-600/25 transition-all transform hover:scale-105">
+              <button 
+                onClick={handleFreeTrial}
+                className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium hover:shadow-lg hover:shadow-blue-600/25 transition-all transform hover:scale-105"
+              >
                 ابدأ تجربة مجانية
               </button>
             </div>
@@ -104,10 +134,16 @@ export default function LandingPage() {
                 الأسئلة الشائعة
               </button>
               <div className="flex flex-col gap-3 pt-3 border-t border-gray-100">
-                <button className="py-2 text-gray-700 font-medium">
+                <button 
+                  onClick={handleLogin}
+                  className="py-2 text-gray-700 font-medium"
+                >
                   تسجيل الدخول
                 </button>
-                <button className="py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium">
+                <button 
+                  onClick={handleFreeTrial}
+                  className="py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium"
+                >
                   ابدأ تجربة مجانية
                 </button>
               </div>
@@ -116,8 +152,8 @@ export default function LandingPage() {
         )}
       </header>
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 relative overflow-hidden">
+      {/* Hero Section - أضف id للمرجع */}
+      <section id="hero" className="pt-32 pb-20 px-4 relative overflow-hidden">
         {/* Background Decorations */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50"></div>
         <div className="absolute left-0 top-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
@@ -144,11 +180,17 @@ export default function LandingPage() {
               
               {/* CTA Buttons */}
               <div className="flex flex-wrap gap-4 mb-8">
-                <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-bold text-lg hover:shadow-xl hover:shadow-blue-600/30 transition-all transform hover:scale-105 flex items-center gap-2">
+                <button 
+                  onClick={handleFreeTrial}
+                  className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-bold text-lg hover:shadow-xl hover:shadow-blue-600/30 transition-all transform hover:scale-105 flex items-center gap-2"
+                >
                   <PlayCircle className="w-5 h-5" />
                   ابدأ التجربة المجانية الآن
                 </button>
-                <button className="px-8 py-4 bg-white text-gray-700 rounded-2xl font-bold text-lg border-2 border-gray-200 hover:border-blue-600 hover:text-blue-600 transition-all flex items-center gap-2">
+                <button 
+                  onClick={handleDemo}
+                  className="px-8 py-4 bg-white text-gray-700 rounded-2xl font-bold text-lg border-2 border-gray-200 hover:border-blue-600 hover:text-blue-600 transition-all flex items-center gap-2"
+                >
                   <ChevronLeft className="w-5 h-5" />
                   شاهد العرض التوضيحي
                 </button>
@@ -283,7 +325,10 @@ export default function LandingPage() {
                   </div>
                 ))}
               </div>
-              <button className="mt-8 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-bold hover:shadow-lg transition-all transform hover:scale-105">
+              <button 
+                onClick={handleFreeTrial}
+                className="mt-8 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl font-bold hover:shadow-lg transition-all transform hover:scale-105"
+              >
                 ابدأ تجربتك المجانية
               </button>
             </div>
@@ -356,11 +401,14 @@ export default function LandingPage() {
                     </li>
                   ))}
                 </ul>
-                <button className={`w-full py-3 rounded-xl font-bold transition-all ${
-                  plan.popular 
-                    ? 'bg-white text-blue-600 hover:bg-gray-100' 
-                    : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg'
-                }`}>
+                <button 
+                  onClick={handleFreeTrial}
+                  className={`w-full py-3 rounded-xl font-bold transition-all ${
+                    plan.popular 
+                      ? 'bg-white text-blue-600 hover:bg-gray-100' 
+                      : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg'
+                  }`}
+                >
                   ابدأ تجربة مجانية
                 </button>
               </div>
@@ -459,10 +507,16 @@ export default function LandingPage() {
             انضم إلى أكثر من 500 مدرسة تثق في نظامنا. جرب مجاناً لمدة 14 يوماً
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <button className="px-8 py-4 bg-white text-blue-600 rounded-2xl font-bold text-lg hover:shadow-xl transition-all transform hover:scale-105">
+            <button 
+              onClick={handleFreeTrial}
+              className="px-8 py-4 bg-white text-blue-600 rounded-2xl font-bold text-lg hover:shadow-xl transition-all transform hover:scale-105"
+            >
               ابدأ التجربة المجانية
             </button>
-            <button className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-2xl font-bold text-lg hover:bg-white/10 transition-all">
+            <button 
+              onClick={handleContactSales}
+              className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-2xl font-bold text-lg hover:bg-white/10 transition-all"
+            >
               تواصل مع المبيعات
             </button>
           </div>
@@ -474,7 +528,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-12">
             <div>
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-3 mb-6 cursor-pointer" onClick={() => scrollToSection('hero')}>
                 <img src={logo} alt="Logo" className="h-10 w-auto" />
                 <span className="text-2xl font-bold">إدارتــي</span>
               </div>
@@ -485,17 +539,17 @@ export default function LandingPage() {
             <div>
               <h4 className="font-bold text-lg mb-4">روابط سريعة</h4>
               <ul className="space-y-2">
-                <li><button className="text-gray-400 hover:text-white transition-colors">المميزات</button></li>
-                <li><button className="text-gray-400 hover:text-white transition-colors">الأسعار</button></li>
-                <li><button className="text-gray-400 hover:text-white transition-colors">آراء العملاء</button></li>
-                <li><button className="text-gray-400 hover:text-white transition-colors">الأسئلة الشائعة</button></li>
+                <li><button onClick={() => scrollToSection('features')} className="text-gray-400 hover:text-white transition-colors">المميزات</button></li>
+                <li><button onClick={() => scrollToSection('pricing')} className="text-gray-400 hover:text-white transition-colors">الأسعار</button></li>
+                <li><button onClick={() => scrollToSection('testimonials')} className="text-gray-400 hover:text-white transition-colors">آراء العملاء</button></li>
+                <li><button onClick={() => scrollToSection('faq')} className="text-gray-400 hover:text-white transition-colors">الأسئلة الشائعة</button></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold text-lg mb-4">الدعم</h4>
               <ul className="space-y-2">
                 <li><button className="text-gray-400 hover:text-white transition-colors">مركز المساعدة</button></li>
-                <li><button className="text-gray-400 hover:text-white transition-colors">تواصل معنا</button></li>
+                <li><button onClick={handleContactSales} className="text-gray-400 hover:text-white transition-colors">تواصل معنا</button></li>
                 <li><button className="text-gray-400 hover:text-white transition-colors">الشروط والأحكام</button></li>
                 <li><button className="text-gray-400 hover:text-white transition-colors">سياسة الخصوصية</button></li>
               </ul>
