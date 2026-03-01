@@ -19,6 +19,8 @@ import FeesManager from './FeesManager';
 import ExpensesManager from './ExpensesManager';
 import TeachersManager from './TeachersManager';
 import ProfitReport from './ProfitReport';
+import logo from '../assets/*.jpg';
+
 
 type View = 'dashboard' | 'students' | 'teachers' | 'fees' | 'expenses' | 'reports';
 
