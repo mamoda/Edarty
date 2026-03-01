@@ -64,9 +64,6 @@ export default function LandingPage() {
             {/* Logo */}
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => scrollToSection('hero')}>
               <img src={logo} alt="Logo" className="h-12 w-auto" />
-              <span className="text-2xl font-bold bg-gradient-to-l from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                إدارتــي
-              </span>
             </div>
 
             {/* Desktop Navigation */}
