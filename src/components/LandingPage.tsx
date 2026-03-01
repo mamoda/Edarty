@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Menu, 
   X, 
@@ -23,18 +23,108 @@ import logo from '../assets/logo.png';
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // استعادة آخر موضع أو قسم عند تحميل الصفحة
+  useEffect(() => {
+    const savedScrollPosition = sessionStorage.getItem('landingScrollPosition');
+    const savedSection = sessionStorage.getItem('landingLastSection');
+    
+    // استعادة الموضع من الرابط إذا كان موجوداً (مثلاً /#features)
+    if (location.hash) {
+      const sectionId = location.hash.replace('#', '');
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+    // استخدم الموضع المحفوظ أولاً
+    else if (savedScrollPosition) {
+      setTimeout(() => {
+        window.scrollTo({
+          top: parseInt(savedScrollPosition),
+          behavior: 'smooth'
+        });
+      }, 100);
+    }
+    // ثم استخدم القسم المحفوظ
+    else if (savedSection) {
+      setTimeout(() => {
+        const element = document.getElementById(savedSection);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, [location]);
+
+  // حفظ موضع التمرير بشكل مستمر
+  useEffect(() => {
+    let ticking = false;
+    
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          // حفظ الموضع الدقيق
+          sessionStorage.setItem('landingScrollPosition', window.scrollY.toString());
+          
+          // تحديث آخر قسم نشط
+          const sections = ['hero', 'features', 'benefits', 'pricing', 'testimonials', 'faq'];
+          const scrollPosition = window.scrollY + 120; // تعويض ارتفاع الـ header
+
+          for (const section of sections) {
+            const element = document.getElementById(section);
+            if (element) {
+              const { offsetTop, offsetHeight } = element;
+              if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+                sessionStorage.setItem('landingLastSection', section);
+                break;
+              }
+            }
+          }
+          
+          ticking = false;
+        });
+        
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // حفظ الموضع قبل إعادة التحميل
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      sessionStorage.setItem('landingScrollPosition', window.scrollY.toString());
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+      // تحديث الرابط بدون إعادة تحميل
+      window.history.pushState({}, '', `#${sectionId}`);
+      // حفظ القسم
+      sessionStorage.setItem('landingLastSection', sectionId);
+      // مسح الموضع الدقيق لأننا نستخدم القسم
+      sessionStorage.removeItem('landingScrollPosition');
     }
     setIsMenuOpen(false);
   };
 
   // دالة للتجربة المجانية
   const handleFreeTrial = () => {
+    // حفظ الموضع قبل المغادرة
+    sessionStorage.setItem('landingScrollPosition', window.scrollY.toString());
     localStorage.setItem('freeTrial', 'true');
     localStorage.setItem('signupSource', 'landing_page');
     navigate('/signup?trial=true');
@@ -42,6 +132,7 @@ export default function LandingPage() {
 
   // دالة لتسجيل الدخول
   const handleLogin = () => {
+    sessionStorage.setItem('landingScrollPosition', window.scrollY.toString());
     navigate('/login');
   };
 
