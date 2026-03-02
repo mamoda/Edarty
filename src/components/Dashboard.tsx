@@ -45,16 +45,24 @@ export default function Dashboard() {
 
     setLoading(true);
     try {
-      const [studentsRes, feesRes, expensesRes] = await Promise.all([
+      const [studentsRes, feesRes, expensesRes, teachersRes] = await Promise.all([
         supabase.from('students').select('*', { count: 'exact' }).eq('user_id', user.id),
         supabase.from('fees').select('amount').eq('user_id', user.id),
         supabase.from('expenses').select('amount').eq('user_id', user.id),
+        supabase.from('teachers').select('*').eq('user_id', user.id),
+
       ]);
 
       const totalStudents = studentsRes.count || 0;
       const activeStudents = studentsRes.data?.filter(s => s.status === 'active').length || 0;
       const totalRevenue = feesRes.data?.reduce((sum, fee) => sum + Number(fee.amount), 0) || 0;
       const totalExpenses = expensesRes.data?.reduce((sum, exp) => sum + Number(exp.amount), 0) || 0;
+      const totalTeachers = teachersRes.data?.length || 0;
+      const activeTeachers = teachersRes.data?.filter(t => t.status === 'active').length || 0;
+      const totalSalaries = teachersRes.data
+        ?.filter(t => t.status === 'active')
+        .reduce((sum, t) => sum + Number(t.salary), 0) || 0;
+
 
       setStats({
         totalStudents,
@@ -62,6 +70,9 @@ export default function Dashboard() {
         totalRevenue,
         totalExpenses,
         netProfit: totalRevenue - totalExpenses,
+        totalTeachers,
+        activeTeachers,
+        totalSalaries,
       });
     } catch (error) {
       console.error('Error loading statistics:', error);
