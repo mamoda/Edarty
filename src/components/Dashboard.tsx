@@ -33,6 +33,10 @@ export default function Dashboard() {
     totalRevenue: 0,
     totalExpenses: 0,
     netProfit: 0,
+    totalTeachers: 0,
+    activeTeachers: 0,
+    totalSalaries: 0,
+
   });
   const [loading, setLoading] = useState(true);
 
