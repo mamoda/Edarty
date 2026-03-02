@@ -8,8 +8,6 @@ export default defineConfig({
     exclude: ['lucide-react'],
   },
   server: {
-    // هذا يجعل Vite يعيد توجيه جميع المسارات إلى index.html
-    middlewareMode: false,
     open: true,
   },
   build: {
@@ -20,7 +18,5 @@ export default defineConfig({
         },
       },
     },
-    // هذا يضمن بناء SPA بشكل صحيح
-    outDir: 'dist',
   },
 });
