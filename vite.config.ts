@@ -8,16 +8,9 @@ export default defineConfig({
     exclude: ['lucide-react'],
   },
   server: {
-    // هذا هو الإعداد الصحيح لـ Vite
-    fs: {
-      strict: true,
-    },
-    // لمعالجة المسارات في React Router
-    proxy: {},
-  },
-  preview: {
-    port: 4173,
-    host: true,
+    // هذا يجعل Vite يعيد توجيه جميع المسارات إلى index.html
+    middlewareMode: false,
+    open: true,
   },
   build: {
     rollupOptions: {
@@ -27,5 +20,7 @@ export default defineConfig({
         },
       },
     },
+    // هذا يضمن بناء SPA بشكل صحيح
+    outDir: 'dist',
   },
 });
