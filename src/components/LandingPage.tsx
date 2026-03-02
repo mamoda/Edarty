@@ -20,7 +20,9 @@ import {
   Zap,
   Lock
 } from 'lucide-react';
-import logo from '../assets/logo.png';
+import logo from '../assets/logo.png'; // Assuming this path is correct for your logo
+import heroDashboard from '../assets/edarty_hero_dashboard.png'; // Path to the generated hero image
+import abstractTechBg from '../assets/edarty_abstract_tech_bg.png'; // Path to the generated abstract background
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -28,10 +30,6 @@ export default function LandingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [scrolled, setScrolled] = useState(false);
-
-  // Colors based on the new logo:
-  // Navy Blue: #001F3F (approx) -> Tailwind: slate-900 / blue-950
-  // Emerald Green: #10B981 -> Tailwind: emerald-500 / emerald-600
 
   useEffect(() => {
     const handleScroll = () => {
@@ -156,26 +154,23 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section id="hero" className="relative pt-40 pb-24 lg:pt-52 lg:pb-40 overflow-hidden">
-        {/* Abstract Background Elements */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-100/50 rounded-full blur-[120px] animate-pulse"></div>
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-100/50 rounded-full blur-[120px]"></div>
-        </div>
+      <section id="hero" className="relative pt-40 pb-24 lg:pt-52 lg:pb-40 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${abstractTechBg})` }}>
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-slate-900/70"></div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-1.5 rounded-full mb-8 border border-emerald-100 animate-bounce-slow">
               <Zap className="w-4 h-4 fill-emerald-600 text-emerald-600" />
               <span className="text-xs font-bold uppercase tracking-wider">مستقبل الإدارة المحاسبية هنا</span>
             </div>
             
-            <h1 className="text-5xl lg:text-7xl font-black text-slate-900 mb-8 leading-[1.1]">
+            <h1 className="text-5xl lg:text-7xl font-black text-white mb-8 leading-[1.1]">
               أدِر عملك بذكاء مع <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-emerald-600 to-slate-900">إدارتــي Edarty</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-200 to-emerald-400">إدارتــي Edarty</span>
             </h1>
             
-            <p className="text-lg lg:text-xl text-slate-600 mb-12 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-lg lg:text-xl text-slate-200 mb-12 leading-relaxed max-w-2xl mx-auto">
               المنصة الأكثر تطوراً لإدارة المحاسبة والعمليات البرمجية. صُممت خصيصاً لتوفير وقتك وزيادة أرباحك بدقة متناهية.
             </p>
             
@@ -196,8 +191,18 @@ export default function LandingPage() {
               </button>
             </div>
 
+            {/* Hero Image - Dashboard */}
+            <div className="mt-20 relative">
+              <img 
+                src={heroDashboard} 
+                alt="Edarty Accounting Dashboard" 
+                className="w-full max-w-4xl mx-auto rounded-xl shadow-2xl border border-slate-700/50 transform hover:scale-102 transition-transform duration-500"
+              />
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/4 h-20 bg-emerald-500/20 blur-3xl -z-10"></div>
+            </div>
+
             {/* Trust Badges */}
-            <div className="mt-16 pt-16 border-t border-slate-200/60">
+            <div className="mt-16 pt-16 border-t border-slate-700/60">
               <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-8">موثوق من قبل أكثر من 500 شركة</p>
               <div className="flex flex-wrap justify-center gap-8 lg:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all">
                 {/* Placeholder for partner logos */}
