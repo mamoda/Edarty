@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'; // تم إزالة React من هنا
+import { useState, useEffect } from 'react'; 
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Menu, 
@@ -27,9 +27,7 @@ export default function LandingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
-  // ========== الحل الصحيح لاستعادة الموضع ==========
   useEffect(() => {
-    // استخدم localStorage بدلاً من sessionStorage (يدوم لفترة أطول)
     const savedScroll = localStorage.getItem('landing_scroll_position');
     const savedSection = localStorage.getItem('landing_section');
     

@@ -8,17 +8,18 @@ export default defineConfig({
     exclude: ['lucide-react'],
   },
   server: {
-    hmr: {
-      // الحفاظ على حالة التطبيق أثناء التحديث السريع
-      overlay: true,
+    // هذا هو الإعداد الصحيح لـ Vite
+    fs: {
+      strict: true,
     },
-    watch: {
-      // تجاهل بعض الملفات لتسريع الأداء
-      ignored: ['**/node_modules/**', '**/dist/**'],
-    },
+    // لمعالجة المسارات في React Router
+    proxy: {},
+  },
+  preview: {
+    port: 4173,
+    host: true,
   },
   build: {
-    // تحسينات للبناء
     rollupOptions: {
       output: {
         manualChunks: {
@@ -26,9 +27,5 @@ export default defineConfig({
         },
       },
     },
-  },
-  // إضافة تعريفات للـ environment variables
-  define: {
-    'process.env.VITE_APP_VERSION': JSON.stringify(process.env.npm_package_version),
   },
 });
