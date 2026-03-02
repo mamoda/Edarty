@@ -177,6 +177,12 @@ export default function Dashboard() {
                         icon={UserPlus}
                         color="#10b981"
                       />
+                       <StatCard
+                        title="إجمالي المعلمين"
+                        value={stats.totalTeachers}
+                        icon={Briefcase}
+                        color="#f59e0b"
+                      />
                       <StatCard
                         title="إجمالي الإيرادات"
                         value={stats.totalRevenue.toFixed(2)}

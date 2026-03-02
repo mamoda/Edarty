@@ -41,7 +41,7 @@ export default function TeachersManager({ onUpdate }: TeachersManagerProps) {
         .from('teachers')
         .select('*')
         .eq('user_id', user.id)
-        .order('full_name', { ascending: true });
+        .order('name', { ascending: true });
 
       if (error) throw error;
       setTeachers(data || []);
@@ -113,7 +113,7 @@ export default function TeachersManager({ onUpdate }: TeachersManagerProps) {
       email: teacher.email,
       specialization: teacher.specialization,
       salary: teacher.salary.toString(),
-      hire_date: teacher.hire_date,
+      hire_date: new Date(teacher.hire_date).toISOString().split('T')[0],
       status: teacher.status,
       address: teacher.address || '',
       qualifications: teacher.qualifications || '',
@@ -170,7 +170,7 @@ export default function TeachersManager({ onUpdate }: TeachersManagerProps) {
         </div>
         <div className="bg-white rounded-xl shadow-md p-6 border-r-4 border-orange-600">
           <p className="text-gray-600 text-sm mb-1">إجمالي الرواتب الشهرية</p>
-          <p className="text-3xl font-bold text-gray-900">{totalSalaries.toFixed(2)} ج.م</p>
+          <p className="text-3xl font-bold text-gray-900">{totalSalaries.toFixed(2)} ر.س</p>
         </div>
       </div>
 
@@ -236,7 +236,7 @@ export default function TeachersManager({ onUpdate }: TeachersManagerProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">الراتب الشهري (ج.م)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">الراتب الشهري (ر.س)</label>
                 <input
                   type="number"
                   step="0.01"
@@ -376,7 +376,7 @@ export default function TeachersManager({ onUpdate }: TeachersManagerProps) {
                     </div>
                     <div>
                       <span className="text-gray-600">الراتب:</span>
-                      <span className="font-bold text-orange-600 mr-2">{teacher.salary.toFixed(2)}ج.م</span>
+                      <span className="font-bold text-orange-600 mr-2">{teacher.salary.toFixed(2)} ر.س</span>
                     </div>
                     <div>
                       <span className="text-gray-600">الهاتف:</span>
