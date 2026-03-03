@@ -443,7 +443,7 @@ export default function StudentsManager({ onUpdate }: StudentsManagerProps) {
                   value={formData.parent_phone}
                   onChange={(e) => setFormData({ ...formData, parent_phone: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                  placeholder="05xxxxxxxx"
+                  placeholder="01xxxxxxxxx"
                   required
                 />
               </div>
