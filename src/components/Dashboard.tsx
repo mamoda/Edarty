@@ -131,44 +131,63 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50" dir="rtl">
-      <header className="bg-white shadow-sm border-b sticky top-0 z-50">
+<header className="bg-white/80 backdrop-blur-md border-b sticky top-0 z-50">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div className="flex items-center justify-between h-20">
-      {/* الشعار */}
-      <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setCurrentView('dashboard')}>
-        <div className="relative">
-          <img 
-            src={logo}
-            alt="إدارتي"
-            className="h-14 w-auto transition-all duration-300 group-hover:scale-105"
-          />
-          <div className="absolute -inset-2 bg-emerald-500/10 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        </div>
-        <div className="hidden sm:block">
-          <h1 className="text-xl font-bold text-gray-900">إدارتــي</h1>
-          <p className="text-xs text-emerald-600">نظام الإدارة المتكامل</p>
+      {/* الشعار مع تأثير متحرك */}
+      <div className="flex items-center gap-4">
+        <div className="relative group cursor-pointer" onClick={() => setCurrentView('dashboard')}>
+          {/* خلفية متوهجة متحركة */}
+          <div className="absolute -inset-3 bg-gradient-to-r from-emerald-400 to-blue-400 rounded-full blur-xl opacity-0 group-hover:opacity-75 transition-opacity duration-500 animate-pulse"></div>
+          
+          {/* اللوجو */}
+          <div className="relative flex items-center gap-3">
+            <img 
+              src={logo}
+              alt="إدارتي"
+              className="h-14 w-auto relative z-10 transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-3"
+            />
+            
+            {/* النص مع تأثير أنيق */}
+            <div className="hidden sm:block">
+              <span className="text-2xl font-black bg-gradient-to-l from-emerald-600 to-blue-600 bg-clip-text text-transparent">
+                إدارتــي
+              </span>
+              <div className="h-0.5 w-0 group-hover:w-full bg-gradient-to-l from-emerald-500 to-blue-500 transition-all duration-500"></div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* معلومات المستخدم */}
+      {/* القسم الأيمن */}
       <div className="flex items-center gap-4">
-        <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-xl">
-          <Users className="w-4 h-4 text-emerald-600" />
-          <span className="text-sm font-bold text-emerald-700">{stats.activeStudents} طالب</span>
+        {/* بطاقة المستخدم */}
+        <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-gray-50 to-white rounded-2xl border border-gray-100 shadow-sm">
+          <div className="text-right">
+            <p className="text-xs text-gray-500">المستخدم</p>
+            <p className="text-sm font-bold text-gray-800">{user?.email?.split('@')[0] || 'مستخدم'}</p>
+          </div>
+          <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-md transform rotate-3">
+            {user?.email?.charAt(0).toUpperCase() || 'م'}
+          </div>
         </div>
-        
+
+        {/* زر الخروج بتصميم مميز */}
         <button
           onClick={() => signOut()}
-          className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-xl transition-all"
+          className="relative group flex items-center gap-2 px-5 py-2.5 bg-white text-red-600 rounded-xl border-2 border-red-100 hover:border-red-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
         >
-          <LogOut className="w-4 h-4" />
-          <span className="hidden sm:inline font-medium">خروج</span>
+          {/* خلفية متحركة */}
+          <div className="absolute inset-0 bg-gradient-to-l from-red-50 to-transparent translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+          
+          {/* المحتوى */}
+          <span className="relative font-bold text-sm">مغادرة</span>
+          <LogOut className="relative w-4 h-4 transition-transform group-hover:-translate-x-1" />
         </button>
       </div>
     </div>
   </div>
 </header>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <aside className="lg:col-span-1">
