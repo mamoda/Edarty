@@ -293,13 +293,13 @@ export default function LandingPage() {
 
             {/* Hero Video - Dashboard */}
 <div className="relative w-full mt-20">
-  {/* إزالة max-w-7xl وجعله full width */}
-  <div className="relative w-full mx-auto">
+  {/* إزالة max-w-7xl للعرض الكامل */}
+  <div className="relative w-full px-4 sm:px-6 lg:px-8">
     <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl border border-slate-700/50 bg-slate-900">
       <div className="relative aspect-video w-full overflow-hidden">
         <video
           ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-10000 ease-in-out"
           autoPlay
           muted
           loop
@@ -308,6 +308,7 @@ export default function LandingPage() {
         >
           <source src={demoVideo} type="video/mp4" />
           <source src={demoVideoWebm} type="video/webm" />
+          متصفحك لا يدعم تشغيل الفيديو.
         </video>
 
         {/* تراكب خفيف جداً لتحسين المظهر */}
@@ -315,11 +316,10 @@ export default function LandingPage() {
       </div>
     </div>
   </div>
-</div>
-              {/* تأثير الإضاءة السفلي */}
-              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-20 bg-emerald-500/20 blur-3xl -z-10"></div>
-            </div>
 
+  {/* تأثير الإضاءة السفلي */}
+  <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-20 bg-emerald-500/20 blur-3xl -z-10"></div>
+</div>
             {/* Trust Badges */}
             <div className="mt-16 pt-16 border-t border-slate-700/60">
               <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-8">
