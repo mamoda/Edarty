@@ -325,8 +325,8 @@ export default function LandingPage() {
             {/* Trust Badges */}
             <div className="mt-16 pt-16 border-t border-slate-700/60">
               <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-8">
-                موثوق من قبل أكثر من 500 شركة
-              </p>
+                شركاء موثوقون يثقون في إدارتــي لتطوير أعمالهم
+               </p>
               <div className="flex flex-wrap justify-center gap-8 lg:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all">
                 {[company1, company2, company3, company4].map((logo, index) => (
                   <img
