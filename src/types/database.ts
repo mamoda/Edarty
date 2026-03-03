@@ -37,7 +37,7 @@ export interface Expense {
 export interface Teacher {
   id: string;
   user_id: string;
-  full_name: string;
+  name: string;
   phone: string;
   email: string;
   specialization: string;

@@ -18,7 +18,10 @@ import {
   PlayCircle,
   ArrowRight,
   Zap,
-  Lock
+  Lock,
+  Facebook,
+  Instagram,
+  Linkedin
 } from 'lucide-react';
 import logo from '../assets/logo.png'; // Assuming this path is correct for your logo
 import heroDashboard from '../assets/edarty_hero_dashboard.png'; // Path to the generated hero image
@@ -266,17 +269,39 @@ export default function LandingPage() {
                 <li><button onClick={handleContactSales} className="text-slate-400 hover:text-emerald-400 transition-colors">تواصل معنا</button></li>
               </ul>
             </div>
-            <div>
-              <h4 className="font-bold text-lg mb-6">تابعنا</h4>
-              <div className="flex gap-4">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center hover:bg-emerald-600 transition-all cursor-pointer">
-                    <div className="w-5 h-5 bg-white/20 rounded-sm"></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+<div>
+  <h4 className="font-bold text-lg mb-6">تابعنا</h4>
+  <div className="flex gap-4">
+    
+    <a 
+      href="https://facebook.com" 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center hover:bg-emerald-600 transition-all cursor-pointer"
+    >
+      <Facebook className="w-5 h-5 text-white" />
+    </a>
+
+    <a 
+      href="https://instagram.com" 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center hover:bg-emerald-600 transition-all cursor-pointer"
+    >
+      <Instagram className="w-5 h-5 text-white" />
+    </a>
+
+    <a 
+      href="https://linkedin.com" 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center hover:bg-emerald-600 transition-all cursor-pointer"
+    >
+      <Linkedin className="w-5 h-5 text-white" />
+    </a>
+
+  </div>
+</div>          </div>
           <div className="border-t border-slate-800 pt-8 flex flex-col md:row justify-between items-center gap-4">
             <p className="text-slate-500 text-sm">© 2026 إدارتــي Edarty. جميع الحقوق محفوظة</p>
             <div className="flex gap-8">

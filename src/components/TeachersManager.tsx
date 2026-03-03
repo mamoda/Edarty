@@ -108,7 +108,7 @@ export default function TeachersManager({ onUpdate }: TeachersManagerProps) {
   const handleEdit = (teacher: Teacher) => {
     setEditingTeacher(teacher);
     setFormData({
-      name: teacher.full_name,
+      name: teacher.name,
       phone: teacher.phone,
       email: teacher.email,
       specialization: teacher.specialization,
@@ -140,7 +140,7 @@ export default function TeachersManager({ onUpdate }: TeachersManagerProps) {
   };
 
   const filteredTeachers = teachers.filter(teacher =>
-    teacher.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    teacher.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     teacher.specialization.toLowerCase().includes(searchTerm.toLowerCase()) ||
     teacher.phone.includes(searchTerm)
   );
@@ -360,7 +360,7 @@ export default function TeachersManager({ onUpdate }: TeachersManagerProps) {
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-3">
-                    <h3 className="text-lg font-bold text-gray-900">{teacher.full_name}</h3>
+                    <h3 className="text-lg font-bold text-gray-900">{teacher.name}</h3>
                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                       teacher.status === 'active'
                         ? 'bg-green-100 text-green-700'
