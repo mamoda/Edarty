@@ -131,30 +131,43 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50" dir="rtl">
-      <header className="bg-white shadow-sm border-b sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-             <div className="flex items-center gap-2">
+      <header className="bg-white shadow-sm border-b sticky top-0 z-50">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-between h-20">
+      {/* الشعار */}
+      <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setCurrentView('dashboard')}>
+        <div className="relative">
           <img 
-            src={logo} // ضع مسار الشعار المناسب
-            alt="شعار التطبيق"
-            className="h-16 w-auto" // يمكنك تعديل الارتفاع حسب حجم الشعار
+            src={logo}
+            alt="إدارتي"
+            className="h-14 w-auto transition-all duration-300 group-hover:scale-105"
           />
-          {/* يمكنك إبقاء النص أو إزالته حسب رغبتك */}
-          {/* <h1 className="text-xl font-bold text-gray-900">إدارتــي</h1> */}
+          <div className="absolute -inset-2 bg-emerald-500/10 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </div>
-            </div>
-            <button
-              onClick={() => signOut()}
-              className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-all"
-            >
-              <LogOut className="w-5 h-5" />
-              <span>تسجيل الخروج</span>
-            </button>
-          </div>
+        <div className="hidden sm:block">
+          <h1 className="text-xl font-bold text-gray-900">إدارتــي</h1>
+          <p className="text-xs text-emerald-600">نظام الإدارة المتكامل</p>
         </div>
-      </header>
+      </div>
+
+      {/* معلومات المستخدم */}
+      <div className="flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-xl">
+          <Users className="w-4 h-4 text-emerald-600" />
+          <span className="text-sm font-bold text-emerald-700">{stats.activeStudents} طالب</span>
+        </div>
+        
+        <button
+          onClick={() => signOut()}
+          className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-xl transition-all"
+        >
+          <LogOut className="w-4 h-4" />
+          <span className="hidden sm:inline font-medium">خروج</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
