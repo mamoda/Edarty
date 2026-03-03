@@ -181,7 +181,7 @@ export default function TeachersManager({ onUpdate }: TeachersManagerProps) {
         </div>
         <div className="bg-white rounded-xl shadow-md p-6 border-r-4 border-orange-600">
           <p className="text-gray-600 text-sm mb-1">إجمالي الرواتب الشهرية</p>
-          <p className="text-3xl font-bold text-gray-900">{totalSalaries.toFixed(2)} ر.س</p>
+          <p className="text-3xl font-bold text-gray-900">{totalSalaries.toFixed(2)} ج.م</p>
         </div>
       </div>
 
