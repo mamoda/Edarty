@@ -214,17 +214,41 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
     setStudentTransactions(transactions);
   };
 
+  // ✅ الكود المصحح - نرسل فقط الحقول الموجودة في قاعدة البيانات
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    if (!user) {
+      alert('الرجاء تسجيل الدخول أولاً');
+      return;
+    }
+
+    // التحقق من صحة البيانات
+    if (!formData.student_id) {
+      alert('الرجاء اختيار الطالب');
+      return;
+    }
+
+    const amount = parseFloat(formData.amount);
+    if (isNaN(amount) || amount <= 0) {
+      alert('الرجاء إدخال مبلغ صحيح');
+      return;
+    }
 
     try {
-      const amount = parseFloat(formData.amount);
+      // ✅ إنشاء كائن يطابق هيكل قاعدة البيانات فقط
+      const finalAmount = formData.transaction_type === 'refund' ? -amount : amount;
+      
       const feeData = {
-        ...formData,
-        amount: formData.transaction_type === 'refund' ? -amount : amount,
+        student_id: formData.student_id,
+        amount: finalAmount,
+        payment_type: formData.payment_type,
+        payment_date: formData.payment_date,
+        academic_year: formData.academic_year,
+        notes: formData.notes || null,  // تحويل السلسلة الفارغة إلى null
         user_id: user.id,
       };
+
+      console.log('بيانات الإرسال:', feeData); // للتتبع
 
       if (editingFee) {
         const { error } = await supabase
@@ -232,21 +256,43 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
           .update(feeData)
           .eq('id', editingFee.id);
 
-        if (error) throw error;
+        if (error) {
+          console.error('خطأ في التحديث:', error);
+          throw error;
+        }
       } else {
         const { error } = await supabase
           .from('fees')
           .insert([feeData]);
 
-        if (error) throw error;
+        if (error) {
+          console.error('خطأ في الإدراج:', error);
+          throw error;
+        }
       }
 
       resetForm();
-      loadData();
+      await loadData(); // انتظار تحميل البيانات
       onUpdate();
-    } catch (error) {
+      
+      alert(editingFee ? 'تم تحديث الدفعة بنجاح' : 'تم إضافة الدفعة بنجاح');
+    } catch (error: any) {
       console.error('Error saving fee:', error);
-      alert('حدث خطأ أثناء حفظ البيانات');
+      
+      // رسائل خطأ مخصصة
+      let errorMessage = 'حدث خطأ أثناء حفظ البيانات';
+      
+      if (error.code === '23503') {
+        errorMessage = 'الطالب المحدد غير موجود';
+      } else if (error.code === '23502') {
+        errorMessage = 'جميع الحقول المطلوبة يجب أن تكون مليئة';
+      } else if (error.code === '42P01') {
+        errorMessage = 'جدول المصاريف غير موجود. الرجاء الاتصال بالدعم الفني';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      alert(errorMessage);
     }
   };
 
@@ -262,6 +308,7 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
       if (error) throw error;
       loadData();
       onUpdate();
+      alert('تم حذف الدفعة بنجاح');
     } catch (error) {
       console.error('Error deleting fee:', error);
       alert('حدث خطأ أثناء حذف الدفعة');
@@ -277,7 +324,7 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
       payment_date: fee.payment_date,
       academic_year: fee.academic_year,
       notes: fee.notes || '',
-      transaction_type: fee.amount >= 0 ? 'deposit' : 'refund'
+      transaction_type: fee.amount >= 0 ? 'deposit' : 'refund' // ✅ هذا فقط للواجهة
     });
     setShowForm(true);
   };
@@ -290,7 +337,7 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
       payment_date: new Date().toISOString().split('T')[0],
       academic_year: new Date().getFullYear().toString(),
       notes: '',
-      transaction_type: 'deposit'
+      transaction_type: 'deposit' // ✅ هذا فقط للواجهة
     });
     setEditingFee(null);
     setShowForm(false);
