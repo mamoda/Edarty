@@ -16,7 +16,7 @@ export default function TeachersManager({ onUpdate }: TeachersManagerProps) {
   const [editingTeacher, setEditingTeacher] = useState<Teacher | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState({
-    full_name: '',
+    name: '',
     phone: '',
     email: '',
     specialization: '',
@@ -108,7 +108,7 @@ export default function TeachersManager({ onUpdate }: TeachersManagerProps) {
   const handleEdit = (teacher: Teacher) => {
     setEditingTeacher(teacher);
     setFormData({
-      full_name: teacher.name,
+      name: teacher.name,
       phone: teacher.phone,
       email: teacher.email,
       specialization: teacher.specialization,
@@ -124,7 +124,7 @@ export default function TeachersManager({ onUpdate }: TeachersManagerProps) {
 
   const resetForm = () => {
     setFormData({
-      full_name: '',
+      name: '',
       phone: '',
       email: '',
       specialization: '',
@@ -191,8 +191,8 @@ export default function TeachersManager({ onUpdate }: TeachersManagerProps) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">الاسم الكامل</label>
                 <input
                   type="text"
-                  value={formData.full_name}
-                  onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                   placeholder="مثال: أحمد محمد"
                   required
