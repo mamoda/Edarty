@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   Menu,
@@ -22,10 +22,12 @@ import {
   Facebook,
   Instagram,
   Linkedin,
+  Pause,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
-import logo from "../assets/logo.png"; // Assuming this path is correct for your logo
-import heroDashboard from "../assets/edarty_hero_dashboard.png"; // Path to the generated hero image
-import abstractTechBg from "../assets/edarty_abstract_tech_bg.png"; // Path to the generated abstract background
+import logo from "../assets/logo.png";
+import abstractTechBg from "../assets/edarty_abstract_tech_bg.png";
 import company1 from "../assets/partners/company1.png";
 import company2 from "../assets/partners/company2.png";
 import company3 from "../assets/partners/company3.png";
@@ -37,6 +39,11 @@ export default function LandingPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [scrolled, setScrolled] = useState(false);
+  
+  // Video refs and state
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,6 +74,25 @@ export default function LandingPage() {
 
     return () => clearTimeout(timer);
   }, []);
+
+  // Video controls
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -260,13 +286,41 @@ export default function LandingPage() {
               </button>
             </div>
 
-            {/* Hero Image - Dashboard */}
-            <div className="mt-20 relative">
-              <img
-                src={heroDashboard}
-                alt="Edarty Accounting Dashboard"
-                className="w-full max-w-4xl mx-auto rounded-xl shadow-2xl border border-slate-700/50 transform hover:scale-102 transition-transform duration-500"
-              />
+            {/* Hero Video - Dashboard */}
+            <div className="mt-20 relative group">
+              <div className="w-full max-w-4xl mx-auto rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden">
+                <video
+                  ref={videoRef}
+                  className="w-full h-auto"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  poster="/videos/edarty-demo-poster.jpg" // ضع صورة بوستر مناسبة
+                >
+                  <source src="/videos/kling_20260303_Image_to_Video_Futuristic_4964_0.mp4" type="video/mp4" />
+                  <source src="/videos/edarty-demo.webm" type="video/webm" />
+                  متصفحك لا يدعم تشغيل الفيديو.
+                </video>
+                
+                {/* Custom Video Controls */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-full px-4 py-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button
+                    onClick={togglePlay}
+                    className="text-white hover:text-emerald-400 transition-colors p-1"
+                    aria-label={isPlaying ? "إيقاف" : "تشغيل"}
+                  >
+                    {isPlaying ? <Pause className="w-5 h-5" /> : <PlayCircle className="w-5 h-5" />}
+                  </button>
+                  <button
+                    onClick={toggleMute}
+                    className="text-white hover:text-emerald-400 transition-colors p-1"
+                    aria-label={isMuted ? "تشغيل الصوت" : "كتم الصوت"}
+                  >
+                    {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                  </button>
+                </div>
+              </div>
               <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/4 h-20 bg-emerald-500/20 blur-3xl -z-10"></div>
             </div>
 
