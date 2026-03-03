@@ -36,18 +36,13 @@ import demoVideo from "../assets/videos/kling_20260303_Image_to_Video_Futuristic
 import demoVideoWebm from "../assets/videos/edarty_hero_dashboard.png";
 import demoPoster from "../assets/videos/edarty_hero_dashboard.png";
 
-
-
-
-
-
 export default function LandingPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [scrolled, setScrolled] = useState(false);
-  
+
   // Video refs and state
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -139,21 +134,23 @@ export default function LandingPage() {
           <div className="flex justify-between items-center">
             {/* Logo */}
             <div
-              className="flex items-center gap-2 cursor-pointer group"
+              className="flex items-center cursor-pointer group relative"
               onClick={() => scrollToSection("hero")}
             >
+              {/* خلفية متحركة */}
+              <div className="absolute -inset-3 bg-gradient-to-r from-emerald-500/0 via-emerald-500/10 to-emerald-500/0 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:scale-110 -z-10"></div>
+
+              {/* اللوجو مع تأثيرات */}
               <div className="relative">
                 <img
                   src={logo}
                   alt="Edarty Logo"
-                  className="h-12 w-auto transition-transform group-hover:scale-105"
+                  className="h-12 md:h-14 w-auto relative z-10 transition-all duration-300 group-hover:scale-105 group-hover:brightness-110"
                 />
+
+                {/* دائرة خفيفة خلف اللوجو */}
+                <div className="absolute inset-0 bg-emerald-500/10 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
-              <span
-                className={`text-2xl font-bold tracking-tight transition-colors ${scrolled ? "text-slate-900" : "text-slate-900"}`}
-              >
-                إدارتــي
-              </span>
             </div>
 
             {/* Desktop Navigation */}
@@ -295,38 +292,38 @@ export default function LandingPage() {
             </div>
 
             {/* Hero Video - Dashboard */}
-          <div className="relative w-full mt-20">
-  <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl border border-slate-700/50 bg-slate-900">
-      <div className="relative aspect-video w-full overflow-hidden">
-        <video
-          ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-10000 ease-in-out"
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster={demoPoster}
-        >
-          <source src={demoVideo} type="video/mp4" />
-          <source src={demoVideoWebm} type="video/webm" />
-        </video>
-        
-        {/* تراكب خفيف جداً لتحسين المظهر */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 via-transparent to-slate-900/20 pointer-events-none"></div>
-      </div>
-    </div>
-  </div>
-  
-  {/* تأثير الإضاءة السفلي */}
-  <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-20 bg-emerald-500/20 blur-3xl -z-10"></div>
-</div>
+            <div className="relative w-full mt-20">
+              <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl border border-slate-700/50 bg-slate-900">
+                  <div className="relative aspect-video w-full overflow-hidden">
+                    <video
+                      ref={videoRef}
+                      className="absolute inset-0 w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-10000 ease-in-out"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      poster={demoPoster}
+                    >
+                      <source src={demoVideo} type="video/mp4" />
+                      <source src={demoVideoWebm} type="video/webm" />
+                    </video>
+
+                    {/* تراكب خفيف جداً لتحسين المظهر */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 via-transparent to-slate-900/20 pointer-events-none"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* تأثير الإضاءة السفلي */}
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-20 bg-emerald-500/20 blur-3xl -z-10"></div>
+            </div>
 
             {/* Trust Badges */}
             <div className="mt-16 pt-16 border-t border-slate-700/60">
               <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-8">
                 شركاء موثوقون يثقون في إدارتــي لتطوير أعمالهم
-               </p>
+              </p>
               <div className="flex flex-wrap justify-center gap-8 lg:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all">
                 {[company1, company2, company3, company4].map((logo, index) => (
                   <img
