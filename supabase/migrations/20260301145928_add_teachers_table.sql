@@ -26,7 +26,7 @@
 CREATE TABLE IF NOT EXISTS teachers (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid REFERENCES auth.users NOT NULL,
-  name text NOT NULL,
+  full_name text NOT NULL,
   specialization text NOT NULL,
   phone text NOT NULL,
   email text,
