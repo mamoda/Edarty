@@ -26,12 +26,12 @@ import {
 import logo from "../assets/logo.png"; // Assuming this path is correct for your logo
 import heroDashboard from "../assets/edarty_hero_dashboard.png"; // Path to the generated hero image
 import abstractTechBg from "../assets/edarty_abstract_tech_bg.png"; // Path to the generated abstract background
-import company1 from "@/assets/partners/company1.svg";
-import company2 from "@/assets/partners/company2.svg";
-import company3 from "@/assets/partners/company3.svg";
-import company4 from "@/assets/partners/company4.svg";
-import company5 from "@/assets/partners/company5.svg";
-import company6 from "@/assets/partners/company6.svg";
+import company1 from "../assets/partners/company1.svg";
+import company2 from "../assets/partners/company2.svg";
+import company3 from "../assets/partners/company3.svg";
+import company4 from "../assets/partners/company4.svg";
+import company5 from "../assets/partners/company5.svg";
+import company6 from "../assets/partners/company6.svg";
 
 export default function LandingPage() {
   const navigate = useNavigate();
