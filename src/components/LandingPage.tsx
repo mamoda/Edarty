@@ -295,42 +295,32 @@ export default function LandingPage() {
             </div>
 
             {/* Hero Video - Dashboard */}
-            <div className="mt-20 relative group">
-              <div className="w-full max-w-4xl mx-auto rounded-xl shadow-2xl border border-slate-700/50 overflow-hidden">
-                <video
-                  ref={videoRef}
-                  className="w-full h-auto"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  poster={demoPoster} // ضع صورة بوستر مناسبة
-                >
-                  <source src={demoVideo} type="video/mp4" />
-                  <source src={demoVideoWebm} type="video/webm" />
-                  متصفحك لا يدعم تشغيل الفيديو.
-                </video>
-                
-                {/* Custom Video Controls */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-full px-4 py-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button
-                    onClick={togglePlay}
-                    className="text-white hover:text-emerald-400 transition-colors p-1"
-                    aria-label={isPlaying ? "إيقاف" : "تشغيل"}
-                  >
-                    {isPlaying ? <Pause className="w-5 h-5" /> : <PlayCircle className="w-5 h-5" />}
-                  </button>
-                  <button
-                    onClick={toggleMute}
-                    className="text-white hover:text-emerald-400 transition-colors p-1"
-                    aria-label={isMuted ? "تشغيل الصوت" : "كتم الصوت"}
-                  >
-                    {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
-                  </button>
-                </div>
-              </div>
-              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/4 h-20 bg-emerald-500/20 blur-3xl -z-10"></div>
-            </div>
+          <div className="relative w-full mt-20">
+  <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl border border-slate-700/50 bg-slate-900">
+      <div className="relative aspect-video w-full overflow-hidden">
+        <video
+          ref={videoRef}
+          className="absolute inset-0 w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-10000 ease-in-out"
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster={demoPoster}
+        >
+          <source src={demoVideo} type="video/mp4" />
+          <source src={demoVideoWebm} type="video/webm" />
+        </video>
+        
+        {/* تراكب خفيف جداً لتحسين المظهر */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 via-transparent to-slate-900/20 pointer-events-none"></div>
+      </div>
+    </div>
+  </div>
+  
+  {/* تأثير الإضاءة السفلي */}
+  <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-20 bg-emerald-500/20 blur-3xl -z-10"></div>
+</div>
 
             {/* Trust Badges */}
             <div className="mt-16 pt-16 border-t border-slate-700/60">
