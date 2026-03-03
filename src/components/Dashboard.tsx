@@ -145,14 +145,14 @@ export default function Dashboard() {
             <img 
               src={logo}
               alt="إدارتي"
-              className="h-14 w-auto relative z-10 transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-3"
+              className="h-16 w-auto relative z-10 transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-3"
             />
             
             {/* النص مع تأثير أنيق */}
             <div className="hidden sm:block">
-              <span className="text-2xl font-black bg-gradient-to-l from-emerald-600 to-blue-600 bg-clip-text text-transparent">
+              {/* <span className="text-2xl font-black bg-gradient-to-l from-emerald-600 to-blue-600 bg-clip-text text-transparent">
                 إدارتــي
-              </span>
+              </span> */}
               <div className="h-0.5 w-0 group-hover:w-full bg-gradient-to-l from-emerald-500 to-blue-500 transition-all duration-500"></div>
             </div>
           </div>
