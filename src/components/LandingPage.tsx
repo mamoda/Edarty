@@ -33,8 +33,8 @@ import company2 from "../assets/partners/company2.png";
 import company3 from "../assets/partners/company3.png";
 import company4 from "../assets/partners/company4.png";
 import demoVideo from "../assets/videos/kling_20260303_Image_to_Video_Futuristic_4964_0.mp4";
-import demoVideoWebm from "../assets/videos/edarty-demo.webm";
-import demoPoster from "../assets/videos/edarty-demo-poster.jpg";
+import demoVideoWebm from "../assets/videos/edarty_hero_dashboard.png";
+import demoPoster from "../assets/videos/edarty_hero_dashboard.png";
 
 
 
