@@ -1,8 +1,7 @@
 import { Fee, Student } from '../types/database';
 import { format } from 'date-fns';
 import { ar } from 'date-fns/locale';
-import { useRef, useEffect, useState } from 'react';
-import { School, BookOpen, Users, CreditCard, CheckCircle, Printer, X, Download } from 'lucide-react';
+import { useRef } from 'react';
 
 interface PaymentReceiptProps {
   fee: Fee;
@@ -13,34 +12,6 @@ interface PaymentReceiptProps {
 
 export default function PaymentReceipt({ fee, student, onClose, onPrint }: PaymentReceiptProps) {
   const receiptRef = useRef<HTMLDivElement>(null);
-  const [schoolName, setSchoolName] = useState('مدرسة النور');
-  const [schoolInfo, setSchoolInfo] = useState({
-    name: 'مدرسة النور',
-    address: 'الرياض - حي النور',
-    phone: '٠١٢٣٤٥٦٧٨٩',
-    email: 'info@alnoor.edu.sa',
-    logo: null as string | null
-  });
-
-  useEffect(() => {
-    // محاولة جلب اسم المدرسة من التخزين المحلي أو من الإعدادات
-    const savedSchoolName = localStorage.getItem('school_name');
-    if (savedSchoolName) {
-      setSchoolName(savedSchoolName);
-      setSchoolInfo(prev => ({ ...prev, name: savedSchoolName }));
-    }
-
-    // محاولة جلب معلومات المدرسة كاملة
-    const savedSchoolInfo = localStorage.getItem('school_info');
-    if (savedSchoolInfo) {
-      try {
-        const parsed = JSON.parse(savedSchoolInfo);
-        setSchoolInfo(prev => ({ ...prev, ...parsed }));
-      } catch (e) {
-        console.error('خطأ في قراءة معلومات المدرسة');
-      }
-    }
-  }, []);
 
   const formatDate = (dateString: string) => {
     try {
@@ -50,235 +21,167 @@ export default function PaymentReceipt({ fee, student, onClose, onPrint }: Payme
     }
   };
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('ar-SA', {
-      style: 'currency',
-      currency: 'SAR',
-      minimumFractionDigits: 2
-    }).format(amount);
-  };
-
-  const getPaymentMethodText = (method: string) => {
-    const methods: Record<string, string> = {
-      cash: 'نقداً',
-      card: 'بطاقة ائتمان',
-      bank_transfer: 'تحويل بنكي',
-      check: 'شيك'
-    };
-    return methods[method] || method;
-  };
-
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto" dir="rtl">
-        {/* شريط الأدوات المتحسن */}
-        <div className="sticky top-0 bg-gradient-to-l from-emerald-600 to-teal-600 text-white px-6 py-4 flex justify-between items-center rounded-t-2xl">
-          <div className="flex items-center gap-3">
-            <div className="bg-white/20 p-2 rounded-xl">
-              <School className="w-6 h-6" />
-            </div>
-            <h2 className="text-xl font-bold">إيصال سداد معتمد</h2>
-          </div>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full" dir="rtl">
+        {/* شريط الأدوات */}
+        <div className="flex justify-between items-center p-4 border-b">
+          <h2 className="text-xl font-bold text-gray-900">إيصال سداد</h2>
           <div className="flex gap-2">
             <button
               onClick={onPrint}
-              className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all flex items-center gap-2 backdrop-blur-sm border border-white/30"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
             >
-              <Printer className="w-5 h-5" />
-              <span>طباعة</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+              </svg>
+              طباعة
             </button>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-white/20 rounded-lg transition-all"
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
             >
-              <X className="w-5 h-5" />
+              إغلاق
             </button>
           </div>
         </div>
 
-        {/* محتوى الإيصال المطور */}
-        <div ref={receiptRef} className="p-8 bg-gradient-to-b from-gray-50 to-white" id="payment-receipt">
-          {/* الهيدر مع الشعار المحسن */}
-          <div className="text-center mb-8 border-b-2 border-dashed border-emerald-200 pb-8">
+        {/* محتوى الإيصال */}
+        <div ref={receiptRef} className="p-8" id="payment-receipt">
+          {/* الهيدر مع الشعار */}
+          <div className="text-center mb-8 border-b pb-6">
             <div className="flex justify-center mb-4">
-              <div className="w-24 h-24 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-xl transform rotate-3 hover:rotate-0 transition-transform">
-                {schoolInfo.logo ? (
-                  <img src={schoolInfo.logo} alt={schoolInfo.name} className="w-20 h-20 object-contain" />
-                ) : (
-                  <School className="w-12 h-12 text-white" />
-                )}
+              <div className="w-20 h-20 bg-green-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
               </div>
             </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-l from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">
-              {schoolInfo.name}
-            </h1>
-            <div className="flex justify-center gap-4 text-sm text-gray-600 mt-2">
-              <span>{schoolInfo.address}</span>
-              <span>•</span>
-              <span dir="ltr">{schoolInfo.phone}</span>
-              <span>•</span>
-              <span>{schoolInfo.email}</span>
-            </div>
-            <p className="text-gray-600 mt-2">إيصال سداد المصاريف الدراسية</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">مدرسة النور</h1>
+            <p className="text-gray-600">إيصال سداد المصاريف الدراسية</p>
           </div>
 
-          {/* رقم الإيصال والتاريخ - تصميم محسن */}
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-4 rounded-xl border border-emerald-200">
-              <span className="text-emerald-600 text-sm block mb-1">رقم الإيصال</span>
-              <span className="font-bold text-gray-900 text-lg">#{fee.id.slice(0, 8).toUpperCase()}</span>
+          {/* رقم الإيصال والتاريخ */}
+          <div className="flex justify-between items-center mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
+            <div>
+              <span className="text-gray-600 text-sm">رقم الإيصال:</span>
+              <span className="font-bold text-gray-900 mr-2">{fee.id.slice(0, 8).toUpperCase()}</span>
             </div>
-            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-4 rounded-xl border border-emerald-200">
-              <span className="text-emerald-600 text-sm block mb-1">تاريخ الإصدار</span>
-              <span className="font-bold text-gray-900">{formatDate(fee.created_at)}</span>
+            <div>
+              <span className="text-gray-600 text-sm">تاريخ الإصدار:</span>
+              <span className="font-bold text-gray-900 mr-2">{formatDate(fee.created_at)}</span>
             </div>
           </div>
 
-          {/* بيانات الطالب - تصميم محسن */}
+          {/* بيانات الطالب */}
           <div className="mb-6">
-            <h3 className="font-bold text-gray-900 mb-3 text-lg flex items-center gap-2 bg-gray-100 p-3 rounded-lg">
-              <Users className="w-5 h-5 text-emerald-600" />
+            <h3 className="font-bold text-gray-900 mb-3 text-lg flex items-center gap-2">
+              <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
               بيانات الطالب
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                <p className="text-gray-600 text-sm mb-1">الاسم الثلاثي</p>
-                <p className="font-bold text-gray-900 text-lg">{student.full_name}</p>
+            <div className="grid grid-cols-2 gap-4 bg-blue-50 p-4 rounded-xl border border-blue-100">
+              <div>
+                <p className="text-gray-600 text-sm">الاسم</p>
+                <p className="font-bold text-gray-900">{student.full_name}</p>
               </div>
-              <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                <p className="text-gray-600 text-sm mb-1">الفصل / المرحلة</p>
-                <p className="font-bold text-gray-900 text-lg">{student.grade}</p>
+              <div>
+                <p className="text-gray-600 text-sm">الفصل</p>
+                <p className="font-bold text-gray-900">{student.grade}</p>
               </div>
               {student.parent_name && (
-                <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                  <p className="text-gray-600 text-sm mb-1">وليّ الأمر</p>
+                <div>
+                  <p className="text-gray-600 text-sm">وليّ الأمر</p>
                   <p className="font-bold text-gray-900">{student.parent_name}</p>
                 </div>
               )}
               {student.parent_phone && (
-                <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                  <p className="text-gray-600 text-sm mb-1">رقم التواصل</p>
+                <div>
+                  <p className="text-gray-600 text-sm">رقم الهاتف</p>
                   <p className="font-bold text-gray-900" dir="ltr">{student.parent_phone}</p>
                 </div>
               )}
             </div>
           </div>
 
-          {/* تفاصيل الدفع - تصميم محسن */}
+          {/* تفاصيل الدفع */}
           <div className="mb-6">
-            <h3 className="font-bold text-gray-900 mb-3 text-lg flex items-center gap-2 bg-gray-100 p-3 rounded-lg">
-              <CreditCard className="w-5 h-5 text-emerald-600" />
+            <h3 className="font-bold text-gray-900 mb-3 text-lg flex items-center gap-2">
+              <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
               تفاصيل الدفع
             </h3>
-            <div className="bg-white rounded-xl border-2 border-emerald-100 overflow-hidden">
-              <table className="w-full">
-                <thead className="bg-gradient-to-l from-emerald-600 to-teal-600 text-white">
-                  <tr>
-                    <th className="text-right p-4 text-sm font-medium">البيان</th>
-                    <th className="text-right p-4 text-sm font-medium">المبلغ</th>
-                    <th className="text-right p-4 text-sm font-medium">طريقة الدفع</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-gray-200 hover:bg-emerald-50/30 transition-colors">
-                    <td className="p-4">
-                      <div>
-                        <span className="font-bold text-gray-900">{fee.payment_type}</span>
-                        {fee.notes && (
-                          <p className="text-sm text-gray-600 mt-1 flex items-center gap-1">
-                            <BookOpen className="w-4 h-4 text-emerald-600" />
-                            {fee.notes}
-                          </p>
-                        )}
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <span className="font-bold text-emerald-600 text-xl">
-                        {formatCurrency(fee.amount)}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <span className="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-sm">
-                        {getPaymentMethodText('cash')}
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-                <tfoot className="bg-gray-50">
-                  <tr>
-                    <td className="p-4 font-bold text-gray-900 text-lg">الإجمالي</td>
-                    <td className="p-4" colSpan={2}>
-                      <span className="font-bold text-emerald-600 text-2xl">
-                        {formatCurrency(fee.amount)}
-                      </span>
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
+            <table className="w-full border border-gray-200 rounded-xl overflow-hidden">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="text-right p-3 text-sm font-medium text-gray-700">البيان</th>
+                  <th className="text-right p-3 text-sm font-medium text-gray-700">المبلغ</th>
+                  <th className="text-right p-3 text-sm font-medium text-gray-700">ملاحظات</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-gray-200">
+                  <td className="p-3">
+                    <span className="font-medium">{fee.payment_type}</span>
+                    {fee.notes && (
+                      <span className="block text-sm text-gray-600 mt-1">{fee.notes}</span>
+                    )}
+                  </td>
+                  <td className="p-3">
+                    <span className="font-bold text-green-600 text-lg">{fee.amount.toFixed(2)}</span>
+                    <span className="text-gray-600 mr-1">ج.م</span>
+                  </td>
+                  <td className="p-3 text-gray-600">نقداً</td>
+                </tr>
+              </tbody>
+              <tfoot className="bg-gray-50">
+                <tr>
+                  <td className="p-3 font-bold text-gray-900">الإجمالي</td>
+                  <td className="p-3" colSpan={2}>
+                    <span className="font-bold text-green-600 text-lg">{fee.amount.toFixed(2)}</span>
+                    <span className="text-gray-600 mr-1">ج.م</span>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
           </div>
 
           {/* السنة الدراسية */}
-          <div className="mb-6 text-center">
-            <span className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-6 py-3 rounded-full text-lg font-bold border-2 border-emerald-300">
-              <BookOpen className="w-5 h-5" />
-              السنة الدراسية: {fee.academic_year}
+          <div className="mb-4 text-center">
+            <span className="inline-block bg-gray-100 px-4 py-2 rounded-lg text-gray-700">
+              السنة الدراسية: <span className="font-bold">{fee.academic_year}</span>
             </span>
           </div>
 
-          {/* الختم الإلكتروني والتوقيع - تصميم محسن */}
-          <div className="mt-8 pt-6 border-t-2 border-dashed border-emerald-200 grid grid-cols-2 gap-8">
+          {/* الختم الإلكتروني والتوقيع */}
+          <div className="mt-8 pt-6 border-t border-gray-200 flex justify-between items-center">
             <div className="text-center">
-              <div className="relative">
-                <div className="w-32 h-32 mx-auto bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full flex items-center justify-center border-4 border-emerald-300">
-                  <div className="text-center">
-                    <CheckCircle className="w-16 h-16 text-emerald-600 mx-auto" />
-                    <span className="text-xs font-bold text-emerald-700 block mt-1">معتمد إلكترونياً</span>
-                  </div>
+              <div className="w-24 h-24 rounded-full border-2 border-green-600 flex items-center justify-center opacity-70 bg-green-50">
+                <div className="text-center">
+                  <svg className="w-12 h-12 text-green-600 mx-auto" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  </svg>
+                  <span className="text-xs text-green-600 font-bold">معتمد إلكترونياً</span>
                 </div>
-                <div className="absolute -inset-2 border-2 border-emerald-200 rounded-full animate-ping opacity-20"></div>
               </div>
-              <p className="text-sm text-gray-600 mt-3">الختم الإلكتروني</p>
+              <p className="text-sm text-gray-600 mt-2">الختم الإلكتروني</p>
             </div>
             
-            <div className="text-center flex flex-col justify-end">
-              <div className="border-t-2 border-gray-400 w-48 mx-auto pt-3 mb-2">
-                <p className="text-gray-900 font-bold text-lg">المسؤول المالي</p>
+            <div className="text-center">
+              <div className="border-t-2 border-gray-400 w-48 pt-2">
+                <p className="text-gray-900 font-bold">المسؤول المالي</p>
               </div>
-              <p className="text-sm text-gray-600">التوقيع</p>
+              <p className="text-sm text-gray-600 mt-2">التوقيع</p>
             </div>
           </div>
 
-          {/* تذييل محسن */}
-          <div className="mt-8 text-center border-t-2 border-emerald-200 pt-6">
-            <div className="grid grid-cols-3 gap-4 text-sm text-gray-600">
-              <div>
-                <p className="font-bold text-emerald-600">هاتف</p>
-                <p dir="ltr">{schoolInfo.phone}</p>
-              </div>
-              <div>
-                <p className="font-bold text-emerald-600">بريد إلكتروني</p>
-                <p>{schoolInfo.email}</p>
-              </div>
-              <div>
-                <p className="font-bold text-emerald-600">عنوان</p>
-                <p>{schoolInfo.address}</p>
-              </div>
-            </div>
-            <p className="mt-4 text-xs text-gray-400 bg-gray-50 p-3 rounded-lg inline-block">
-              تم إنشاء هذا الإيصال إلكترونياً عبر نظام إدارتي لإدارة المدارس © {new Date().getFullYear()}
-            </p>
-          </div>
-
-          {/* رمز QR للتحقق */}
-          <div className="absolute bottom-4 left-4 opacity-20">
-            <div className="w-16 h-16 bg-gray-800 rounded-lg flex items-center justify-center">
-              <div className="grid grid-cols-3 gap-1">
-                {[...Array(9)].map((_, i) => (
-                  <div key={i} className="w-1 h-1 bg-white"></div>
-                ))}
-              </div>
-            </div>
+          {/* تذييل */}
+          <div className="mt-8 text-center text-sm text-gray-500 border-t border-gray-200 pt-4">
+            <p>تم إنشاء هذا الإيصال إلكترونياً وهو معتمد بدون توقيع</p>
+            <p className="mt-1">للاستفسار: info@school.com | 0123456789</p>
+            <p className="mt-1 text-xs text-gray-400">نظام إدارتي لإدارة المدارس</p>
           </div>
         </div>
       </div>
