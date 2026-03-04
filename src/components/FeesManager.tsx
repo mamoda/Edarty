@@ -614,7 +614,11 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
                 <span className="text-xs text-gray-500">المستحق</span>
               </div>
               <p className="text-2xl font-bold text-gray-900">
-                {statistics.expected_revenue.toFixed(2)} ج.م
+                {Number(statistics.expected_revenue).toLocaleString("ar-EG", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{" "}
+                ج.م{" "}
               </p>
               <p className="text-xs text-blue-600 mt-1">المتوقع تحصيله</p>
             </div>
@@ -625,7 +629,11 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
                 <span className="text-xs text-gray-500">المتبقي</span>
               </div>
               <p className="text-2xl font-bold text-gray-900">
-                {statistics.outstanding_balance.toFixed(2)} ج.م
+                {Number(statistics.outstanding_balance).toLocaleString("ar-EG", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{" "}
+                ج.م{" "}
               </p>
               <p className="text-xs text-yellow-600 mt-1">
                 مستحق على {statistics.overdue_students} طالب
