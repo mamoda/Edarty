@@ -315,7 +315,10 @@ export default function ExpensesManager({ onUpdate }: ExpensesManagerProps) {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                     <div>
                       <span className="text-gray-600">المبلغ:</span>
-                      <span className="font-bold text-red-600 mr-2">{expense.amount.toFixed(2)} ر.س</span>
+                      <span className="font-bold text-red-600 mr-2">{Number(expense.amount).toLocaleString("ar-EG", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })} ج.م</span>
                     </div>
                     <div>
                       <span className="text-gray-600">التاريخ:</span>
