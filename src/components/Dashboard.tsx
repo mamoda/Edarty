@@ -269,13 +269,13 @@ export default function Dashboard() {
                       />
                       <StatCard
                         title="إجمالي الإيرادات"
-                        value={`${stats.totalRevenue.toFixed(2)} ج.م`} // الرقم ثم العملة
+                        value={`${Number(stats.totalRevenue).toLocaleString("ar-EG")} ج.م`}
                         icon={DollarSign}
                         color="#8b5cf6"
                       />
                       <StatCard
                         title="إجمالي التكاليف"
-                        value={`${stats.totalExpenses.toFixed(2)} ج.م`} // الرقم ثم العملة
+                        value={`${Number(stats.totalExpenses).toLocaleString("ar-EG")} ج.م`}
                         icon={TrendingDown}
                         color="#ef4444"
                       />
