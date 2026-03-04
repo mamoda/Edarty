@@ -847,10 +847,20 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
                   </div>
                   <div className="flex justify-between text-xs mt-1">
                     <span className="text-gray-600">
-                      المدفوع: {Number(balance.total_paid).toLocaleString('ar-EG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ج.م
+                      المدفوع:{" "}
+                      {Number(balance.total_paid).toLocaleString("ar-EG", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}{" "}
+                      ج.م
                     </span>
                     <span className="text-gray-600">
-                      المستحق: {Number(balance.total_required).toLocaleString('ar-EG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ج.م
+                      المستحق:{" "}
+                      {Number(balance.total_required).toLocaleString("ar-EG", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}{" "}
+                      ج.م
                     </span>
                   </div>
                 </div>
@@ -890,7 +900,11 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
                     className={`font-bold ${fee.amount >= 0 ? "text-green-600" : "text-red-600"}`}
                   >
                     {fee.amount >= 0 ? "+" : "-"}
-                    {Math.abs(fee.amount).toFixed(2)} ج.م
+                    {Number(Math.abs(fee.amount)).toLocaleString("ar-EG", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    ج.م{" "}
                   </p>
                   <p className="text-xs text-gray-500">{fee.academic_year}</p>
                 </div>
