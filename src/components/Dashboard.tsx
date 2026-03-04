@@ -236,7 +236,7 @@ export default function Dashboard() {
                         icon={DollarSign}
                         color="#8b5cf6"
                         prefix=" ج.م"
-                        style={{ direction: 'ltr' }}
+  className="flex-row-reverse" // أو أي كلاس تريده
 
                       />
                       <StatCard
@@ -245,7 +245,7 @@ export default function Dashboard() {
                         icon={TrendingDown}
                         color="#ef4444"
                         prefix="ج.م"
-                        style={{ direction: 'ltr' }}
+  className="flex-row-reverse" // أو أي كلاس تريده
 
                       />
                     </div>
