@@ -646,7 +646,11 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
                 <span className="text-xs text-gray-500">متوسط السداد</span>
               </div>
               <p className="text-2xl font-bold text-gray-900">
-                {statistics.average_per_student.toFixed(2)} ج.م
+                {Number(statistics.average_per_student).toLocaleString("ar-EG", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}{" "}
+                ج.م{" "}
               </p>
               <p className="text-xs text-purple-600 mt-1">لكل طالب</p>
             </div>
