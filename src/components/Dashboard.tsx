@@ -296,7 +296,11 @@ export default function Dashboard() {
                     className={`text-3xl font-bold ${stats.netProfit >= 0 ? "text-green-600" : "text-red-600"}`}
                   >
                     {stats.netProfit >= 0 ? "+" : ""}
-                    {stats.netProfit.toFixed(2)} ج.م
+                    {Number(stats.netProfit).toLocaleString("ar-EG", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    ج.م
                   </div>
                   <div className="mt-4 pt-4 border-t">
                     <div className="flex justify-between text-sm mb-2">
