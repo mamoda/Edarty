@@ -231,22 +231,17 @@ export default function Dashboard() {
                         color="#f59e0b"
                       />
                       <StatCard
-                        title="إجمالي الإيرادات"
-                        value={stats.totalRevenue.toFixed(2)}
-                        icon={DollarSign}
-                        color="#8b5cf6"
-                        prefix=" ج.م"
-  className="flex-row-reverse" // أو أي كلاس تريده
-
-                      />
+  title="إجمالي الإيرادات"
+  value={`${stats.totalRevenue.toFixed(2)} ج.م`} // الرقم ثم العملة
+  icon={DollarSign}
+  color="#8b5cf6"
+/>
                       <StatCard
                         title="إجمالي التكاليف"
                         value={stats.totalExpenses.toFixed(2)}
                         icon={TrendingDown}
                         color="#ef4444"
                         prefix="ج.م"
-  className="flex-row-reverse" // أو أي كلاس تريده
-
                       />
                     </div>
                   )}
