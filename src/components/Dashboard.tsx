@@ -236,6 +236,8 @@ export default function Dashboard() {
                         icon={DollarSign}
                         color="#8b5cf6"
                         prefix=" ج.م"
+                        style={{ direction: 'ltr' }}
+
                       />
                       <StatCard
                         title="إجمالي التكاليف"
@@ -243,6 +245,8 @@ export default function Dashboard() {
                         icon={TrendingDown}
                         color="#ef4444"
                         prefix="ج.م"
+                        style={{ direction: 'ltr' }}
+
                       />
                     </div>
                   )}
