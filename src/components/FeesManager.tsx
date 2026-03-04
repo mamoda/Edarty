@@ -629,10 +629,13 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
                 <span className="text-xs text-gray-500">المتبقي</span>
               </div>
               <p className="text-2xl font-bold text-gray-900">
-                {Number(statistics.outstanding_balance).toLocaleString("ar-EG", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}{" "}
+                {Number(statistics.outstanding_balance).toLocaleString(
+                  "ar-EG",
+                  {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  },
+                )}{" "}
                 ج.م{" "}
               </p>
               <p className="text-xs text-yellow-600 mt-1">
@@ -646,10 +649,13 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
                 <span className="text-xs text-gray-500">متوسط السداد</span>
               </div>
               <p className="text-2xl font-bold text-gray-900">
-                {Number(statistics.average_per_student).toLocaleString("ar-EG", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}{" "}
+                {Number(statistics.average_per_student).toLocaleString(
+                  "ar-EG",
+                  {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  },
+                )}{" "}
                 ج.م{" "}
               </p>
               <p className="text-xs text-purple-600 mt-1">لكل طالب</p>
@@ -677,7 +683,11 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
                     <p
                       className={`font-bold ${balance.balance >= 0 ? "text-green-600" : "text-red-600"}`}
                     >
-                      {balance.balance.toFixed(2)} ج.م
+                      {Number(balance.balance).toLocaleString("ar-EG", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}{" "}
+                      ج.م{" "}
                     </p>
                     <p
                       className={`text-xs px-2 py-1 rounded-full ${getStatusColor(balance.status)}`}
