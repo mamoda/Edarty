@@ -847,10 +847,10 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
                   </div>
                   <div className="flex justify-between text-xs mt-1">
                     <span className="text-gray-600">
-                      المدفوع: {balance.total_paid.toFixed(2)} ج.م
+                      المدفوع: {Number(balance.total_paid).toLocaleString('ar-EG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ج.م
                     </span>
                     <span className="text-gray-600">
-                      المستحق: {balance.total_required.toFixed(2)} ج.م
+                      المستحق: {Number(balance.total_required).toLocaleString('ar-EG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ج.م
                     </span>
                   </div>
                 </div>
