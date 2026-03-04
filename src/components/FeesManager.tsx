@@ -782,7 +782,11 @@ export default function FeesManager({ onUpdate }: FeesManagerProps) {
                       <p
                         className={`text-2xl font-bold ${balance.balance >= 0 ? "text-green-600" : "text-red-600"}`}
                       >
-                        {balance.balance.toFixed(2)} ج.م
+                        {Number(balance.balance).toLocaleString("ar-EG", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}{" "}
+                        ج.م
                       </p>
                     </div>
                     <div className="flex gap-2">
