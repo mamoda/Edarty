@@ -306,16 +306,24 @@ export default function Dashboard() {
                     <div className="flex justify-between text-sm mb-2">
                       <span className="text-gray-600">الإيرادات</span>
                       <span className="text-green-600 font-medium">
-                        {stats.totalRevenue.toFixed(2)} ج.م
+                        {Number(stats.totalRevenue).toLocaleString("ar-EG", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}{" "}
+                        ج.م
                       </span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-600">التكاليف</span>
                       <span className="text-red-600 font-medium">
-                        {stats.totalExpenses.toFixed(2)} ج.م
+                        {Number(stats.totalExpenses).toLocaleString("ar-EG", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}{" "}
+                        ج.م
                       </span>
                     </div>
-                  </div>
+                  </div>{" "}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
