@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import LandingPage from './components/LandingPage';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+import UpgradePage from "./components/UpgradePage"; // ✅ تصحيح اسم الملف
 
 // مكون لحماية المسارات الخاصة (يحتاج تسجيل دخول)
 function PrivateRoute({ children }: { children: React.ReactNode }) {
@@ -58,20 +59,27 @@ function AppRoutes() {
         </PublicRoute>
       } />
       
-      {/* صفحة التسجيل (عامة) - استخدام useSearchParams داخل Login بدلاً من props */}
+      {/* صفحة التسجيل (عامة) */}
       <Route path="/signup" element={
         <PublicRoute>
           <Login />
         </PublicRoute>
       } />
       
-      {/* مسار التجربة المجانية - يعيد التوجيه للتسجيل مع باراميتر */}
+      {/* مسار التجربة المجانية */}
       <Route path="/free-trial" element={<Navigate to="/signup?trial=true" />} />
       
-      {/* مسار خطط الأسعار - يمكن إضافته لاحقاً */}
+      {/* مسار خطط الأسعار */}
       <Route path="/pricing" element={<Navigate to="/#pricing" />} />
       
-      {/* لوحة التحكم (خاصة - تحتاج تسجيل دخول) */}
+      {/* 🆕 مسار الترقية (خاص - يحتاج تسجيل دخول) */}
+      <Route path="/upgrade" element={
+        <PrivateRoute>
+          <UpgradePage />
+        </PrivateRoute>
+      } />
+      
+      {/* لوحة التحكم (خاصة) */}
       <Route path="/dashboard" element={
         <PrivateRoute>
           <Dashboard />

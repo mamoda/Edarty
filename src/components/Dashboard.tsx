@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   Users,
   DollarSign,
@@ -25,6 +27,8 @@ import ExpensesManager from "./ExpensesManager";
 import TeachersManager from "./TeachersManager";
 import ProfitReport from "./ProfitReport";
 import logo from "../assets/logo.png";
+const navigate = useNavigate();
+
 
 // إضافة الأنماط المخصصة في ملف CSS منفصل أو استخدام Tailwind مباشرة
 // يمكنك إضافة هذه الأنماط في ملف index.css الرئيسي
@@ -138,9 +142,10 @@ export default function Dashboard() {
     }
   };
 
-  const handleUpgrade = () => {
-    window.open("${https://edarty.vercel.app}/upgrade", "_blank");
-  };
+const handleUpgrade = () => {
+  navigate("/upgrade"); // ✅ هذا سيفتح الصفحة في نفس التبويب
+};
+
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
