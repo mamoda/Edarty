@@ -139,7 +139,7 @@ export default function Dashboard() {
   };
 
   const handleUpgrade = () => {
-    window.open("/upgrade", "_blank");
+    window.open("${https://edarty.vercel.app}/upgrade", "_blank");
   };
 
   const handleSendMessage = (e: React.FormEvent) => {
@@ -252,6 +252,7 @@ export default function Dashboard() {
 
             {/* القسم الأيمن */}
             <div className="flex items-center gap-4">
+              
               {/* زر الأبجريد (Upgrade) - تصميم احترافي وجذاب */}
               <button
                 onClick={handleUpgrade}
@@ -264,6 +265,8 @@ export default function Dashboard() {
                 {/* إضافة تأثير عند النقر */}
                 <span className="absolute inset-0 bg-white/30 opacity-0 group-active:opacity-100 transition-opacity duration-150"></span>
               </button>
+
+
               {/* بطاقة المستخدم */}
               <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-gray-50 to-white rounded-2xl border border-gray-100 shadow-sm">
                 <div className="text-right">
