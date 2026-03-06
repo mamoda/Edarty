@@ -3,7 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import LandingPage from './components/LandingPage';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
-import UpgradePage from "./components/UpgradePage"; // ✅ تصحيح اسم الملف
+import UpgradePage from "./components/UpgradePage"; 
 
 // مكون لحماية المسارات الخاصة (يحتاج تسجيل دخول)
 function PrivateRoute({ children }: { children: React.ReactNode }) {
