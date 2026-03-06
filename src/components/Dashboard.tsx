@@ -139,7 +139,7 @@ export default function Dashboard() {
   };
 
   const handleUpgrade = () => {
-    window.open("https://edarty.vercel.app/upgrade", "_blank");
+    window.open("/upgrade", "_blank");
   };
 
   const handleSendMessage = (e: React.FormEvent) => {
