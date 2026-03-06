@@ -11,7 +11,6 @@ import {
   BarChart3,
   Briefcase,
   Crown,
-  Sparkles,
   MessageCircle,
   Headphones,
   Send,
@@ -72,7 +71,10 @@ export default function Dashboard() {
       id: 1,
       type: "bot",
       text: "مرحباً! كيف يمكنني مساعدتك اليوم؟",
-      time: new Date().toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" }),
+      time: new Date().toLocaleTimeString("ar-EG", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     },
   ]);
 
@@ -149,7 +151,10 @@ export default function Dashboard() {
       id: messages.length + 1,
       type: "user",
       text: message,
-      time: new Date().toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" }),
+      time: new Date().toLocaleTimeString("ar-EG", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
     setMessages([...messages, userMessage]);
     setMessage("");
@@ -160,9 +165,12 @@ export default function Dashboard() {
         id: messages.length + 2,
         type: "bot",
         text: "شكراً لتواصلك معنا. أحد ممثلي الدعم سيرد عليك قريباً.",
-        time: new Date().toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" }),
+        time: new Date().toLocaleTimeString("ar-EG", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
       };
-      setMessages(prev => [...prev, botMessage]);
+      setMessages((prev) => [...prev, botMessage]);
     }, 1000);
   };
 
@@ -245,17 +253,17 @@ export default function Dashboard() {
             {/* القسم الأيمن */}
             <div className="flex items-center gap-4">
               {/* زر الأبجريد (Upgrade) - تصميم احترافي وجذاب */}
-<button
-  onClick={handleUpgrade}
-  className="relative group flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
->
-  {/* تأثيرات الزر الموجودة */}
-  <Crown className="relative w-5 h-5 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12" />
-  <span className="relative font-bold text-sm">الأبجريد</span>
-  
-  {/* إضافة تأثير عند النقر */}
-  <span className="absolute inset-0 bg-white/30 opacity-0 group-active:opacity-100 transition-opacity duration-150"></span>
-</button>
+              <button
+                onClick={handleUpgrade}
+                className="relative group flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
+              >
+                {/* تأثيرات الزر الموجودة */}
+                <Crown className="relative w-5 h-5 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12" />
+                <span className="relative font-bold text-sm">الأبجريد</span>
+
+                {/* إضافة تأثير عند النقر */}
+                <span className="absolute inset-0 bg-white/30 opacity-0 group-active:opacity-100 transition-opacity duration-150"></span>
+              </button>
               {/* بطاقة المستخدم */}
               <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-gray-50 to-white rounded-2xl border border-gray-100 shadow-sm">
                 <div className="text-right">
@@ -305,7 +313,9 @@ export default function Dashboard() {
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              <p className="text-xs text-white/80 mt-1">نحن هنا لمساعدتك 24/7</p>
+              <p className="text-xs text-white/80 mt-1">
+                نحن هنا لمساعدتك 24/7
+              </p>
             </div>
 
             {/* منطقة الرسائل */}
@@ -323,7 +333,9 @@ export default function Dashboard() {
                     }`}
                   >
                     <p className="text-sm">{msg.text}</p>
-                    <p className={`text-xs mt-1 ${msg.type === "user" ? "text-gray-500" : "text-white/70"}`}>
+                    <p
+                      className={`text-xs mt-1 ${msg.type === "user" ? "text-gray-500" : "text-white/70"}`}
+                    >
                       {msg.time}
                     </p>
                   </div>
@@ -332,7 +344,10 @@ export default function Dashboard() {
             </div>
 
             {/* نموذج إرسال الرسالة */}
-            <form onSubmit={handleSendMessage} className="p-4 border-t bg-white">
+            <form
+              onSubmit={handleSendMessage}
+              className="p-4 border-t bg-white"
+            >
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -360,13 +375,13 @@ export default function Dashboard() {
         >
           {/* خلفية متوهجة متحركة */}
           <div className="absolute -inset-2 bg-gradient-to-l from-emerald-400 to-blue-400 rounded-full blur-xl opacity-0 group-hover:opacity-75 transition-opacity duration-500 animate-pulse"></div>
-          
+
           {/* أيقونة الدردشة */}
           <MessageCircle className="relative w-6 h-6 transition-transform duration-300 group-hover:rotate-12" />
-          
+
           {/* شريط الإشعارات */}
           <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border-2 border-white rounded-full animate-pulse"></span>
-          
+
           {/* أيقونة السماعة الصغيرة */}
           <Headphones className="absolute -bottom-1 -left-1 w-4 h-4 text-white/80" />
         </button>
