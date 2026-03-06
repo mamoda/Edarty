@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 import {
   Users,
@@ -27,7 +26,6 @@ import ExpensesManager from "./ExpensesManager";
 import TeachersManager from "./TeachersManager";
 import ProfitReport from "./ProfitReport";
 import logo from "../assets/logo.png";
-const navigate = useNavigate();
 
 
 // إضافة الأنماط المخصصة في ملف CSS منفصل أو استخدام Tailwind مباشرة
@@ -143,7 +141,7 @@ export default function Dashboard() {
   };
 
 const handleUpgrade = () => {
-  navigate("/upgrade"); // ✅ هذا سيفتح الصفحة في نفس التبويب
+  window.location.href = "/upgrade"; // ✅ هذا سيفتح الصفحة في نفس التبويب
 };
 
 
